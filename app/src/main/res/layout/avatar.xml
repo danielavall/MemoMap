@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B3E8FA"
+    tools:context=".TestingActivity">
+
+    <!-- Cancel Button -->
+    <TextView
+        android:id="@+id/btnCancel"
+        android:text="Cancel"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Save Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSave"
+        android:text="Save"
+        android:textColor="#000000"
+        android:background="@drawable/rounded_button_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Avatar Container (FrameLayout stacking layers) -->
+    <FrameLayout
+        android:id="@+id/avatarContainer"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnCancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Base Skin -->
+
+        <!-- Hair -->
+        <ImageView
+            android:id="@+id/imgSkin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/skin2" />
+
+        <!-- Clothes -->
+        <ImageView
+            android:id="@+id/imgClothes"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/cloth3"
+            android:layout_marginBottom="0dp" />
+
+
+        <!-- Face (eyes, lips, etc) -->
+
+        <ImageView
+            android:id="@+id/imgHair"
+            android:layout_width="170dp"
+            android:layout_height="292dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="30dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/hair4" />
+
+        <ImageView
+            android:id="@+id/imgFace"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="135dp"
+            android:src="@drawable/face2" />
+
+
+
+    </FrameLayout>
+
+
+
+    <!-- Tab Layout -->
+    <LinearLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/avatarContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/tabSkin"
+            style="@style/TabButtonStyle"
+            android:text="Skin" />
+
+        <Button
+            android:id="@+id/tabHair"
+            style="@style/TabButtonStyle"
+            android:text="Hairstyle" />
+
+        <Button
+            android:id="@+id/tabFace"
+            style="@style/TabButtonStyle"
+            android:text="Face" />
+
+        <Button
+            android:id="@+id/tabClothes"
+            style="@style/TabButtonStyle"
+            android:text="Clothes" />
+    </LinearLayout>
+
+    <!-- Thumbnails -->
+    <HorizontalScrollView
+        android:id="@+id/scrollOptions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:id="@+id/optionsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp" />
+    </HorizontalScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

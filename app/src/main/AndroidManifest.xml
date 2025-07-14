@@ -12,9 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MemoMap"
         tools:targetApi="31">
-        <activity
-            android:name=".TestingActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".TestingActivity"-->
+<!--            android:exported="false" />-->
+<!--        Coba ini gua ya-->
+        <activity android:name=".AvatarActivity" android:exported="true">
+            <!-- This makes AvatarActivity the app's entry point -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
