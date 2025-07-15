@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fillViewport="true"
+    android:paddingTop="24dp"
+    android:paddingBottom="48dp"
+    android:layout_marginTop="80dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp">
+
+        <!-- Choose Year Section -->
+        <TextView
+            android:id="@+id/tvChooseYearTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Year"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="8dp"
+            android:fontFamily="sans-serif-medium" />
+
+        <!-- Year Range selection -->
+        <LinearLayout
+            android:id="@+id/layoutYearRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="4dp">
+
+            <ImageButton
+                android:id="@+id/btnYearLeft"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Previous Year Range"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_media_previous"
+                android:tint="#000000" />
+
+            <TextView
+                android:id="@+id/yearRange"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="2025 - 2039"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:fontFamily="sans-serif" />
+
+            <ImageButton
+                android:id="@+id/btnYearRight"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Next Year Range"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_media_next"
+                android:tint="#000000" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#BDBDBD" />
+
+        <!-- Year Grid -->
+        <GridLayout
+            android:id="@+id/yearGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="5"
+            android:rowCount="3"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true" />
+
+        <!-- Month Section -->
+        <TextView
+            android:id="@+id/tvChooseMonthTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Month"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="8dp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:id="@+id/layoutMonthYearSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="4dp">
+
+            <ImageButton
+                android:id="@+id/btnMonthLeft"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Previous Month Year"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_media_previous"
+                android:tint="#000000" />
+
+            <TextView
+                android:id="@+id/tvMonthYear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="2027"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:fontFamily="sans-serif" />
+
+            <ImageButton
+                android:id="@+id/btnMonthRight"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Next Month Year"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_media_next"
+                android:tint="#000000" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#BDBDBD" />
+
+        <GridLayout
+            android:id="@+id/monthGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="5"
+            android:rowCount="3"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true" />
+
+        <!-- Week Section -->
+        <TextView
+            android:id="@+id/tvChooseWeekTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Week"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="8dp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:id="@+id/layoutWeekMonthSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="4dp">
+
+            <ImageButton
+                android:id="@+id/btnWeekLeft"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Previous Week Month"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_media_previous"
+                android:tint="#000000" />
+
+            <TextView
+                android:id="@+id/tvWeekMonth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Mar"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:fontFamily="sans-serif" />
+
+            <ImageButton
+                android:id="@+id/btnWeekRight"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Next Week Month"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_media_next"
+                android:tint="#000000" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#BDBDBD" />
+
+        <GridLayout
+            android:id="@+id/weekGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="5"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="48dp"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true" />
+
+        <Button
+            android:id="@+id/finishButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Finish"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="#90CAF9"
+            android:textColor="#000000"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:fontFamily="sans-serif-medium" />
+
+    </LinearLayout>
+</ScrollView>
