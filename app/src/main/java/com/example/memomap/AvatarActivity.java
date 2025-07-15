@@ -74,8 +74,9 @@ public class AvatarActivity extends AppCompatActivity {
         tabFace.setOnClickListener(v -> setTabBehavior(tabFace, "face", tabSkin, tabHair, tabFace, tabClothes));
         tabClothes.setOnClickListener(v -> setTabBehavior(tabClothes, "clothes", tabSkin, tabHair, tabFace, tabClothes));
 
-        showOptions("skin"); // default tab
+        setTabBehavior(tabSkin, "skin", tabSkin, tabHair, tabFace, tabClothes);
     }
+
 
     private void showOptions(String type) {
         currentTab = type;
