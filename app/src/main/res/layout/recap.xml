@@ -1,6 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootFrame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F7F7"
+    android:layout_marginTop="60dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- LAYOUT LOADING -->
+    <RelativeLayout
+        android:id="@+id/layoutLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recap The Moment!"
+            android:textSize="24sp"
+            android:textColor="#000000"
+            android:paddingStart="25dp"
+            android:fontFamily="@font/poppins_bold"
+            android:layout_marginTop="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_marginTop="6dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="60dp"
+            android:text="Sometimes you will never know the value of a moment until it becomes a memory."
+            android:textAlignment="viewStart"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="12sp" />
+
+        <!-- Buttons: Year, Month, Week, Create -->
+        <LinearLayout
+            android:id="@+id/dateButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/subtitle"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:weightSum="4"
+            android:gravity="center_horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/yearButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/dropdown_recap_background"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Year"
+                android:textAllCaps="false"
+                android:textColor="#000000" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/monthButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/dropdown_recap_background"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Month"
+                android:textAllCaps="false"
+                android:textColor="#000000" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/weekButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/dropdown_recap_background"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Week"
+                android:textAllCaps="false"
+                android:textColor="#000000" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/createButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/spinner_background"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Create!"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- Arrow, Hint Text, and Boat -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/arrowHint"
+                android:layout_width="100dp"
+                android:layout_height="175dp"
+                android:src="@drawable/ic_arrow_up_circle"
+                android:layout_marginBottom="25dp" />
+
+            <TextView
+                android:id="@+id/textHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose your memorable date!"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="12sp"
+                android:textColor="#cbcbcb" />
+
+            <ImageView
+                android:id="@+id/boat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/boat"
+                android:visibility="gone" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- LAYOUT RECAP -->
+    <ScrollView
+        android:id="@+id/layoutRecap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Tambahkan konten recap di sini -->
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
