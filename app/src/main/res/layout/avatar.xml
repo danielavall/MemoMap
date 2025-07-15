@@ -98,7 +98,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/avatarContainer"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,22 +107,26 @@
         <Button
             android:id="@+id/tabSkin"
             style="@style/TabButtonStyle"
-            android:text="Skin" />
+            android:text="Skin"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
         <Button
             android:id="@+id/tabHair"
             style="@style/TabButtonStyle"
-            android:text="Hairstyle" />
+            android:text="Hairstyle"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
         <Button
             android:id="@+id/tabFace"
             style="@style/TabButtonStyle"
-            android:text="Face" />
+            android:text="Face"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
         <Button
             android:id="@+id/tabClothes"
             style="@style/TabButtonStyle"
-            android:text="Clothes" />
+            android:text="Clothes"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
     </LinearLayout>
 
     <!-- Thumbnails -->

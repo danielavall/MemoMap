@@ -1,5 +1,6 @@
 package com.example.memomap;
 
+import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,6 +14,13 @@ public class AvatarActivity extends AppCompatActivity {
     LinearLayout optionsContainer;
     Button tabSkin, tabHair, tabFace, tabClothes;
     String currentTab = "skin";
+
+    private void resetTabStyles(Button... buttons) {
+        for (Button btn : buttons) {
+            btn.setSelected(false);
+            btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14); // default size
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +39,33 @@ public class AvatarActivity extends AppCompatActivity {
         tabFace = findViewById(R.id.tabFace);
         tabClothes = findViewById(R.id.tabClothes);
 
-        tabSkin.setOnClickListener(v -> showOptions("skin"));
-        tabHair.setOnClickListener(v -> showOptions("hair"));
-        tabFace.setOnClickListener(v -> showOptions("face"));
-        tabClothes.setOnClickListener(v -> showOptions("clothes"));
+        tabSkin.setOnClickListener(v -> {
+            resetTabStyles(tabSkin, tabHair, tabFace, tabClothes);
+            tabSkin.setSelected(true);
+            tabSkin.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16); // selected
+            showOptions("skin"); // now both work
+        });
+
+        tabHair.setOnClickListener(v -> {
+            resetTabStyles(tabSkin, tabHair, tabFace, tabClothes);
+            tabHair.setSelected(true);
+            tabHair.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16); // selected
+            showOptions("hair"); // now both work
+        });
+
+        tabFace.setOnClickListener(v -> {
+            resetTabStyles(tabSkin, tabHair, tabFace, tabClothes);
+            tabFace.setSelected(true);
+            tabFace.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16); // selected
+            showOptions("face"); // now both work
+        });
+
+        tabClothes.setOnClickListener(v -> {
+            resetTabStyles(tabSkin, tabClothes, tabFace, tabClothes);
+            tabClothes.setSelected(true);
+            tabClothes.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16); // selected
+            showOptions("clothes"); // now both work
+        });
 
         showOptions("skin"); // default tab
     }
@@ -73,4 +104,5 @@ public class AvatarActivity extends AppCompatActivity {
             default: return new int[]{};
         }
     }
+
 }
