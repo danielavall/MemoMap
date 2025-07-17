@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.MemoMap" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple</item>
         <item name="colorPrimaryVariant">@color/pink</item>
         <item name="colorOnPrimary">@color/black</item>
@@ -13,5 +14,4 @@
 
         <item name="android:fontFamily">@font/poppins</item>
     </style>
-
 </resources>
