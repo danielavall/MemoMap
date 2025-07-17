@@ -16,6 +16,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -132,6 +133,14 @@ public class AvatarActivity extends AppCompatActivity {
 
         Button btnSave = findViewById(R.id.btnSave);
         btnSave.setOnClickListener(v -> saveAvatarToImage());
+
+        TextView btnCancel = findViewById(R.id.btnCancel);
+
+        btnCancel.setOnClickListener(v -> {
+            Intent intent = new Intent(AvatarActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            finish(); // optional, to prevent returning to AvatarActivity
+        });
 
         // Get passed-in selections
         Intent intent = getIntent();

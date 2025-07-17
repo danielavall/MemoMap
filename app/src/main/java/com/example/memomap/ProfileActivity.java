@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -122,6 +123,14 @@ public class ProfileActivity extends AppCompatActivity {
             // Save to shared preferences or server here
             setInputsEnabled(false);
             showEditButtons(false);
+        });
+
+        ImageButton btnBack = findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(v -> {
+            Intent Mainintent = new Intent(ProfileActivity.this, MainActivity.class);
+            startActivity(Mainintent);
+            finish(); // Optional: finish ProfileActivity so it doesn’t stay in back stack
         });
 
         etDob.setOnClickListener(v -> {
