@@ -30,6 +30,7 @@
     <string name="photo_count_plural">%1$d photos</string>
     <string name="video_count">%1$d video</string>
     <string name="video_count_plural">%1$d videos</string>
+    <string name="btn_calendar">btn_calendar</string>
 
     <plurals name="photo_count_plural">
         <item quantity="one">%d photo</item>
