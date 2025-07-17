@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateDefinition">
     <string name="app_name">MemoMap</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -13,11 +13,42 @@
     <string name="today_s_line_title">Today\'s Line!</string>
     <string name="today_s_line_spoiler">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="btn_write_now">Write Now</string>
+
     <string name="your_goals">Your Goals!</string>
     <string name="add_goals_button">addGoalsButton</string>
     <string name="today_s_line">Today\'s Line!</string>
     <string name="input_text_here">Input Text Here</string>
     <string name="save">Save</string>
     <string name="send_goal_button">send_goal_button</string>
+
+    <string name="header_nov">NOV</string>
+    <string name="header_dec">DEC</string>
+    <string name="header_jan">JAN</string>
+    <string name="header_feb">FEB</string>
+    <string name="header_mar">MAR</string>
+    <string name="btn_previous">btn_previous</string>
+    <string name="btn_next">btn_next</string>
+    <string name="day">day</string>
+    <string name="date">01</string>
+    <string name="month">month</string>
+    <string name="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent quis tellus sem.</string>
+
+    <!-- Home Page for recycler view -->
+    <string name="photo_count">%1$d photo</string>
+    <string name="photo_count_plural">%1$d photos</string>
+    <string name="video_count">%1$d video</string>
+    <string name="video_count_plural">%1$d videos</string>
+    <string name="btn_calendar">btn_calendar</string>
+
+    <plurals name="photo_count_plural">
+        <item quantity="one">%d photo</item>
+        <item quantity="other">%d photos</item>
+    </plurals>
+
+    <plurals name="video_count_plural">
+        <item quantity="one">%d video</item>
+        <item quantity="other">%d videos</item>
+    </plurals>
+
 
 </resources>
