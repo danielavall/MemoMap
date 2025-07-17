@@ -17,9 +17,9 @@
 <!--        <activity android:name=".MainActivity" android:exported="true" />-->
         <activity android:name=".CalendarRecap" android:exported="false" />
         <activity android:name=".LoadingRecap" android:exported="true" />
-        <activity android:name=".AvatarActivity" android:exported="true" />
+        <activity android:name=".ProfileActivity" android:exported="true" />
 
-        <!-- AvatarActivity jadi entry point -->
+        <!-- TULIS DI SINI BIAR jadi entry point -->
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
