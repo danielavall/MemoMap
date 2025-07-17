@@ -8,9 +8,11 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.example.memomap.databinding.ActivityMainBinding;
+import androidx.fragment.app.FragmentTransaction;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
     ActivityMainBinding binding;
 
     @Override
@@ -44,4 +46,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+
+
+
+
 }

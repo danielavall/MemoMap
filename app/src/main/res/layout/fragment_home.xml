@@ -95,6 +95,7 @@
                     android:id="@+id/today_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-10dp"
                     android:text="@string/today_date"
                     android:fontFamily="@font/poppins_extrabold"
                     android:textColor="@color/black"
@@ -104,8 +105,9 @@
                     android:id="@+id/today_month"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-15dp"
                     android:text="@string/today_month"
-                    android:fontFamily="@font/poppins_bold"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textColor="@color/black"
                     android:textSize="22sp"/>
 
@@ -216,7 +218,7 @@
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:layout_marginHorizontal="6dp"/>
+                android:layout_marginHorizontal="4dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -225,7 +227,7 @@
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:layout_marginHorizontal="6dp"/>
+                android:layout_marginHorizontal="4dp"/>
 
             <!-- Panah kiri -->
             <ImageButton
@@ -262,7 +264,7 @@
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/grey"
                 android:textSize="20sp"
-                android:layout_marginHorizontal="6dp"/>
+                android:layout_marginHorizontal="4dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -271,7 +273,7 @@
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/grey"
                 android:textSize="20sp"
-                android:layout_marginHorizontal="6dp"/>
+                android:layout_marginHorizontal="4dp"/>
         </LinearLayout>
 
         <View
@@ -289,13 +291,23 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintTop_toBottomOf="@id/header_content">
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="110dp"
+        app:layout_constraintTop_toBottomOf="@id/header_content"
+        app:layout_constraintBottom_toBottomOf="parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_journal_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.memomap.JournalCardAdapter;
+import com.example.memomap.JournalCardModel;
+
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
@@ -61,4 +76,22 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_journal_card);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List<JournalCardModel> journalList = new ArrayList<>();
+        journalList.add(new JournalCardModel("THU", "01", "JAN", "Hari pertama kuliah", 2, 7, R.color.blue));
+        journalList.add(new JournalCardModel("THU", "02", "JAN", "Ngoding Android Studio", 2, 1, R.color.green));
+        journalList.add(new JournalCardModel("THU", "03", "JAN", "Ketemu dosen pembimbing", 7, 0, R.color.purple));
+
+        JournalCardAdapter adapter = new JournalCardAdapter(journalList);
+        recyclerView.setAdapter(adapter);
+    }
+
+
 }

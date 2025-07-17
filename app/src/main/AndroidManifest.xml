@@ -14,13 +14,13 @@
         android:theme="@style/Theme.MemoMap"
         tools:targetApi="31">
 
-        <activity android:name=".MainActivity" android:exported="true" />
+<!--        <activity android:name=".MainActivity" android:exported="true" />-->
         <activity android:name=".CalendarRecap" android:exported="false" />
         <activity android:name=".LoadingRecap" android:exported="true" />
         <activity android:name=".AvatarActivity" android:exported="true" />
 
         <!-- AvatarActivity jadi entry point -->
-        <activity android:name=".ProfileActivity" android:exported="true">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
