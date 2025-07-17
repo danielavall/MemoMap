@@ -2,23 +2,71 @@ package com.example.memomap;
 
 import static androidx.core.util.TypedValueCompat.dpToPx;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class AvatarActivity extends AppCompatActivity {
 
+    private int selectedSkin = -1;
+    private int selectedHair = -1;
+    private int selectedFace = -1;
+    private int selectedClothes = -1;
     private int dpToPx(int dp) {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
+
+    private void saveAvatarToImage() {
+        FrameLayout avatarContainer = findViewById(R.id.avatarContainer);
+
+        Bitmap avatarBitmap = Bitmap.createBitmap(
+                avatarContainer.getWidth(),
+                avatarContainer.getHeight(),
+                Bitmap.Config.ARGB_8888
+        );
+
+        Canvas canvas = new Canvas(avatarBitmap);
+        avatarContainer.draw(canvas);
+
+        File file = new File(getFilesDir(), "avatar.png");
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            avatarBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+            Intent intent = new Intent(AvatarActivity.this, ProfileActivity.class);
+            intent.putExtra("avatarPath", file.getAbsolutePath());
+            intent.putExtra("skin", selectedSkin);
+            intent.putExtra("hair", selectedHair);
+            intent.putExtra("face", selectedFace);
+            intent.putExtra("clothes", selectedClothes);
+            startActivity(intent);
+            finish(); // finish AvatarActivity to prevent back stack
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to save avatar", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     ImageView imgSkin, imgHair, imgFace, imgClothes;
     GridLayout optionsContainer;
@@ -52,6 +100,14 @@ public class AvatarActivity extends AppCompatActivity {
         showOptions(optionKey);
     }
 
+    private void updateAvatarPreview() {
+        if (selectedSkin != -1) imgSkin.setImageResource(selectedSkin);
+        if (selectedHair != -1) imgHair.setImageResource(selectedHair);
+        if (selectedFace != -1) imgFace.setImageResource(selectedFace);
+        if (selectedClothes != -1) imgClothes.setImageResource(selectedClothes);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,8 +130,29 @@ public class AvatarActivity extends AppCompatActivity {
         tabFace.setOnClickListener(v -> setTabBehavior(tabFace, "face", tabSkin, tabHair, tabFace, tabClothes));
         tabClothes.setOnClickListener(v -> setTabBehavior(tabClothes, "clothes", tabSkin, tabHair, tabFace, tabClothes));
 
+        Button btnSave = findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(v -> saveAvatarToImage());
+
+        // Get passed-in selections
+        Intent intent = getIntent();
+        if (intent != null) {
+            int skin = intent.getIntExtra("skin", -1);
+            int hair = intent.getIntExtra("hair", -1);
+            int face = intent.getIntExtra("face", -1);
+            int clothes = intent.getIntExtra("clothes", -1);
+
+            if (skin != -1) selectedSkin = skin;
+            if (hair != -1) selectedHair = hair;
+            if (face != -1) selectedFace = face;
+            if (clothes != -1) selectedClothes = clothes;
+
+            // Also call a method to reflect these visually
+            updateAvatarPreview();
+        }
+
         setTabBehavior(tabSkin, "skin", tabSkin, tabHair, tabFace, tabClothes);
     }
+
 
 
     private void showOptions(String type) {
@@ -105,20 +182,27 @@ public class AvatarActivity extends AppCompatActivity {
 
             option.setOnClickListener(v -> {
                 switch (type) {
-                    case "skin": imgSkin.setImageResource(id); break;
-                    case "hair": imgHair.setImageResource(id); break;
-                    case "face": imgFace.setImageResource(id); break;
-                    case "clothes": imgClothes.setImageResource(id); break;
+                    case "skin":
+                        imgSkin.setImageResource(id);
+                        selectedSkin = id;
+                        break;
+                    case "hair":
+                        imgHair.setImageResource(id);
+                        selectedHair = id;
+                        break;
+                    case "face":
+                        imgFace.setImageResource(id);
+                        selectedFace = id;
+                        break;
+                    case "clothes":
+                        imgClothes.setImageResource(id);
+                        selectedClothes = id;
+                        break;
                 }
             });
 
             optionsContainer.addView(option);
         }
-
-
-
-
-
     }
 
     private int[] getImageSetForType(String type) {
