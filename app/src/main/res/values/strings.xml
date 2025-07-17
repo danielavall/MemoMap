@@ -13,5 +13,11 @@
     <string name="today_s_line_title">Today\'s Line!</string>
     <string name="today_s_line_spoiler">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="btn_write_now">Write Now</string>
+    <string name="your_goals">Your Goals!</string>
+    <string name="add_goals_button">addGoalsButton</string>
+    <string name="today_s_line">Today\'s Line!</string>
+    <string name="input_text_here">Input Text Here</string>
+    <string name="save">Save</string>
+    <string name="send_goal_button">send_goal_button</string>
 
 </resources>
