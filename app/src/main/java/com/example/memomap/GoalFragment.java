@@ -1,42 +1,41 @@
-package com.example.memomap;
+// app/src/main/java/com/example/memomap/GoalFragment.java
+package com.example.memomap; // Pastikan package ini sesuai dengan package proyekmu
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GoalFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+// Import kelas Goal dan GoalAdapter yang sudah kamu buat
+import com.example.memomap.Goal;
+import com.example.memomap.GoalAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class GoalFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // Variabel untuk RecyclerView dan Adapter
+    private RecyclerView goalRecyclerView;
+    private GoalAdapter goalAdapter;
+    private List<Goal> goalList; // Daftar untuk menyimpan objek Goal
 
     public GoalFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GoalFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    // Kamu bisa biarkan metode newInstance dan ARG_PARAM1/ARG_PARAM2 jika kamu butuh
+    // untuk melewati argumen ke fragment ini di masa depan.
+    // Untuk tujuan RecyclerView, mereka tidak langsung digunakan.
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private String mParam1;
+    private String mParam2;
+
     public static GoalFragment newInstance(String param1, String param2) {
         GoalFragment fragment = new GoalFragment();
         Bundle args = new Bundle();
@@ -58,7 +57,39 @@ public class GoalFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_goal, container, false);
+        // Inflate the layout for this fragment (pastikan ini merujuk ke fragmen_goal.xml)
+        View view = inflater.inflate(R.layout.fragment_goal, container, false); // Pastikan nama layoutnya benar: fragmen_goal
+
+        // --- Inisialisasi RecyclerView ---
+        goalRecyclerView = view.findViewById(R.id.goal_recycler_view);
+
+        // Atur LayoutManager untuk RecyclerView
+        // LinearLayoutManager akan menampilkan item dalam daftar vertikal
+        goalRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // --- Buat Data Dummy untuk Contoh ---
+        goalList = new ArrayList<>();
+        goalList.add(new Goal("Belajar Android Jetpack Compose", "Task", false)); // Contoh Task
+        goalList.add(new Goal("Lari Pagi 30 Menit", "Task", true)); // Contoh Task
+        goalList.add(new Goal("Baca Buku 'Atomic Habits'", "Goal", false)); // Contoh Goal
+        goalList.add(new Goal("Selesaikan Laporan Bulanan", "Goal", false)); // Contoh Goal
+        goalList.add(new Goal("Telepon Orang Tua", "Task", false)); // Contoh Task
+        goalList.add(new Goal("Menyiram Tanaman", "Goal", true)); // Contoh Goal
+        // Kamu bisa tambahkan lebih banyak objek Goal di sini
+        // Data ini nantinya bisa kamu ambil dari database lokal (Room), API, atau sumber lain
+
+        // --- Inisialisasi dan Atur Adapter ke RecyclerView ---
+        goalAdapter = new GoalAdapter(goalList);
+        goalRecyclerView.setAdapter(goalAdapter);
+
+        // Jika kamu ingin menambahkan fungsionalitas untuk FloatingActionButton:
+        // FloatingActionButton addGoalsButton = view.findViewById(R.id.addGoalsButton);
+        // addGoalsButton.setOnClickListener(v -> {
+        //     // Tulis kode di sini untuk menangani klik tombol tambah tujuan
+        //     // Contoh: Buka dialog atau fragment baru untuk menambahkan tujuan
+        //     Toast.makeText(getContext(), "Tombol Tambah Tujuan Diklik!", Toast.LENGTH_SHORT).show();
+        // });
+
+        return view;
     }
 }
