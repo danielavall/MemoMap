@@ -1,6 +1,8 @@
 package com.example.memomap;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -29,8 +31,17 @@ public class CalendarHomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         prepareMonthsData();
-        adapter = new CalendarAdapter(monthsData);
+        adapter = new CalendarAdapter( monthsData);
         recyclerView.setAdapter(adapter);
+
+        ImageButton btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(CalendarHomeActivity.this, MainActivity.class); //  arahkan ke activity utama
+            intent.putExtra("navigate_to", "home"); // kirim sinyal bahwa ingin ke HomeFragment
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void prepareMonthsData() {

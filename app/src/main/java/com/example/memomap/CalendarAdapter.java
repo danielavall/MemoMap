@@ -1,6 +1,7 @@
 package com.example.memomap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +31,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         this.months = months;
     }
 
+    private Context context;
+
     // ViewHolder: Memegang referensi ke View dalam setiap item list
     public static class CalendarViewHolder extends RecyclerView.ViewHolder { // Nama kelas diubah menjadi CalendarViewHolder
         public final TextView textViewMonthName;
@@ -43,6 +48,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     @NonNull
     @Override
     public CalendarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // Tipe return dan parameter diubah
+        context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_view_item_calendar, parent, false);
         return new CalendarViewHolder(view); // Nama constructor diubah
@@ -56,7 +62,28 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
         holder.gridLayoutCalendarDays.removeAllViews();
 
-        int firstDayOfWeek = calendarModel.getCalendarForFirstDay().get(Calendar.DAY_OF_WEEK);
+        holder.itemView.setOnClickListener(v -> {
+            String month = calendarModel.getMonthName();
+
+            if (month.equals("JAN")) {
+                Intent intent = new Intent(context, FullMonthActivity.class);
+                intent.putExtra("month", "JAN");
+                intent.putExtra("year", calendarModel.getYear());
+
+                // Kirim coloredDates ke FullMonthActivity
+                if (calendarModel.getColoredDates() != null) {
+                    intent.putExtra("coloredDates", new HashMap<>(calendarModel.getColoredDates()));
+                }
+
+                context.startActivity(intent);
+            } else {
+                Toast.makeText(context, "Belum tersedia untuk bulan " + month, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Calendar firstDay = calendarModel.getCalendarForFirstDay();
+        int firstDayOfWeek = firstDay != null ? firstDay.get(Calendar.DAY_OF_WEEK) : Calendar.SUNDAY;
+
         int startOffset = (firstDayOfWeek - Calendar.SUNDAY + 7) % 7;
 
         for (int i = 0; i < startOffset; i++) {
