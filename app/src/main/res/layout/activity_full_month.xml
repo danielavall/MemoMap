@@ -1,0 +1,29 @@
+<!-- res/layout/activity_full_month.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fullMonthContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Nama bulan dan tahun -->
+    <TextView
+        android:id="@+id/textMonthYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="JANUARY 2025"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingBottom="16dp" />
+
+    <!-- Grid tanggal -->
+    <GridLayout
+        android:id="@+id/gridFullMonth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="7"
+        android:rowCount="6"
+        android:useDefaultMargins="true" />
+</LinearLayout>

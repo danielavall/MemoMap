@@ -9,6 +9,10 @@ public class JournalCardModel {
     private int videoCount;
     private int backgroundColor;
 
+    private String dayNumber;
+    private String monthNumber;
+    private int colorResId;
+
     public JournalCardModel(String day, String date, String month, String description, int photoCount, int videoCount, int backgroundColor) {
         this.day = day;
         this.date = date;
@@ -18,6 +22,19 @@ public class JournalCardModel {
         this.videoCount = videoCount;
         this.backgroundColor = backgroundColor;
     }
+
+    public String getDayNumber() {
+        return dayNumber;
+    }
+
+    public String getMonthNumber() {
+        return month;
+    }
+
+    public int getColorResId() {
+        return colorResId;
+    }
+
 
     public String getDay() { return day; }
 
