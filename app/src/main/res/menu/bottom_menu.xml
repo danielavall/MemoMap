@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_navbar_home"/>
+
+    <item
+        android:id="@+id/goal"
+        android:title="Goal"
+        android:icon="@drawable/ic_navbar_goal"/>
+
+    <item
+        android:id="@+id/fab"
+        android:title=""
+        android:enabled="false"/>
+
+    <item
+        android:id="@+id/recap"
+        android:title="Recap"
+        android:icon="@drawable/ic_navbar_recap"/>
+
+    <item
+        android:id="@+id/suggest"
+        android:title="Suggest"
+        android:icon="@drawable/ic_navbar_suggest"/>
+
+</menu>

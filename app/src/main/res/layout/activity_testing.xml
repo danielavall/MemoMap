@@ -10,7 +10,17 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="@font/poppins_italic"
         android:text="Halo"
-        android:fontFamily="@font/poppins_italic"/>
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="-88dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="440dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
