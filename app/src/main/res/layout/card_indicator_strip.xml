@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+<View xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/indicator_strip_view"
+    android:layout_width="20dp"
+    android:layout_height="4dp"
+    android:background="@drawable/card_progress"
+    android:layout_marginEnd="4dp"
+    android:minWidth="0dp"
+    android:minHeight="0dp" />
