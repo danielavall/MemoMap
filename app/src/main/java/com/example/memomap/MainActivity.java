@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.example.memomap.databinding.ActivityMainBinding;
 
@@ -21,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         replaceFragment(new HomeFragment());
-        binding.bottomNavigationView.setBackground(null); // Bisa tetap ada, meski visibilitas dikontrol dari BottomAppBar
+        binding.bottomNavigationView.setBackground(null);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -36,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -43,31 +43,5 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
-    }
-
-    // Metode untuk menampilkan BottomAppBar dan FAB
-    public void showBottomNav() {
-        if (binding != null) {
-            if (binding.bottomAppBar != null) {
-                binding.bottomAppBar.setVisibility(View.VISIBLE);
-            }
-            // >>> TAMBAHKAN KODE INI UNTUK MENAMPILKAN FAB <<<
-            if (binding.fabJournal != null) { // fab_journal adalah ID baru untuk FAB Anda
-                binding.fabJournal.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    // Metode untuk menyembunyikan BottomAppBar dan FAB
-    public void hideBottomNav() {
-        if (binding != null) {
-            if (binding.bottomAppBar != null) {
-                binding.bottomAppBar.setVisibility(View.GONE);
-            }
-            // >>> TAMBAHKAN KODE INI UNTUK MENYEMBUNYIKAN FAB <<<
-            if (binding.fabJournal != null) { // fab_journal adalah ID baru untuk FAB Anda
-                binding.fabJournal.setVisibility(View.GONE);
-            }
-        }
     }
 }
