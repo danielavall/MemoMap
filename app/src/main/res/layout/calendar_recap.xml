@@ -6,8 +6,7 @@
     android:background="#FFFFFF"
     android:fillViewport="true"
     android:paddingTop="24dp"
-    android:paddingBottom="48dp"
-    android:layout_marginTop="80dp">
+    android:paddingBottom="48dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +14,6 @@
         android:orientation="vertical"
         android:paddingHorizontal="16dp">
 
-        <!-- Choose Year Section -->
         <TextView
             android:id="@+id/tvChooseYearTitle"
             android:layout_width="wrap_content"
@@ -27,7 +25,6 @@
             android:paddingBottom="8dp"
             android:fontFamily="sans-serif-medium" />
 
-        <!-- Year Range selection -->
         <LinearLayout
             android:id="@+id/layoutYearRange"
             android:layout_width="match_parent"
@@ -38,14 +35,11 @@
 
             <ImageButton
                 android:id="@+id/btnYearLeft"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="wrap_content"   android:layout_height="wrap_content"  android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Previous Year Range"
                 android:scaleType="fitCenter"
-                android:src="@android:drawable/ic_media_previous"
-                android:tint="#000000" />
+                android:src="@drawable/back_button_small" android:tint="#000000" />
 
             <TextView
                 android:id="@+id/yearRange"
@@ -60,14 +54,11 @@
 
             <ImageButton
                 android:id="@+id/btnYearRight"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"   android:layout_height="wrap_content"  android:layout_marginStart="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Next Year Range"
                 android:scaleType="fitCenter"
-                android:src="@android:drawable/ic_media_next"
-                android:tint="#000000" />
+                android:src="@drawable/next_button_small" android:tint="#000000" />
         </LinearLayout>
 
         <View
@@ -75,7 +66,6 @@
             android:layout_height="1dp"
             android:background="#BDBDBD" />
 
-        <!-- Year Grid -->
         <GridLayout
             android:id="@+id/yearGrid"
             android:layout_width="match_parent"
@@ -87,7 +77,6 @@
             android:alignmentMode="alignMargins"
             android:useDefaultMargins="true" />
 
-        <!-- Month Section -->
         <TextView
             android:id="@+id/tvChooseMonthTitle"
             android:layout_width="wrap_content"
@@ -110,14 +99,11 @@
 
             <ImageButton
                 android:id="@+id/btnMonthLeft"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="wrap_content"   android:layout_height="wrap_content"  android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Previous Month Year"
                 android:scaleType="fitCenter"
-                android:src="@android:drawable/ic_media_previous"
-                android:tint="#000000" />
+                android:src="@drawable/back_button_small" android:tint="#000000" />
 
             <TextView
                 android:id="@+id/tvMonthYear"
@@ -132,14 +118,11 @@
 
             <ImageButton
                 android:id="@+id/btnMonthRight"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"   android:layout_height="wrap_content"  android:layout_marginStart="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Next Month Year"
                 android:scaleType="fitCenter"
-                android:src="@android:drawable/ic_media_next"
-                android:tint="#000000" />
+                android:src="@drawable/next_button_small" android:tint="#000000" />
         </LinearLayout>
 
         <View
@@ -158,7 +141,6 @@
             android:alignmentMode="alignMargins"
             android:useDefaultMargins="true" />
 
-        <!-- Week Section -->
         <TextView
             android:id="@+id/tvChooseWeekTitle"
             android:layout_width="wrap_content"
@@ -181,14 +163,11 @@
 
             <ImageButton
                 android:id="@+id/btnWeekLeft"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="wrap_content"   android:layout_height="wrap_content"  android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Previous Week Month"
                 android:scaleType="fitCenter"
-                android:src="@android:drawable/ic_media_previous"
-                android:tint="#000000" />
+                android:src="@drawable/back_button_small" android:tint="#000000" />
 
             <TextView
                 android:id="@+id/tvWeekMonth"
@@ -203,14 +182,11 @@
 
             <ImageButton
                 android:id="@+id/btnWeekRight"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"   android:layout_height="wrap_content"  android:layout_marginStart="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Next Week Month"
                 android:scaleType="fitCenter"
-                android:src="@android:drawable/ic_media_next"
-                android:tint="#000000" />
+                android:src="@drawable/next_button_small" android:tint="#000000" />
         </LinearLayout>
 
         <View
@@ -224,7 +200,7 @@
             android:layout_height="wrap_content"
             android:columnCount="5"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="48dp"
+            android:layout_marginBottom="30dp"
             android:alignmentMode="alignMargins"
             android:useDefaultMargins="true" />
 

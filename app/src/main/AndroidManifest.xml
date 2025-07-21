@@ -13,34 +13,44 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MemoMap"
         tools:targetApi="31">
-        <activity
-            android:name=".FullMonthActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RecyclerViewItemCalendarActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CalendarHomeActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MemoMap" /> <!-- <activity android:name=".MainActivity" android:exported="true" /> -->
-        <activity
-            android:name=".CalendarRecap"
-            android:exported="false" />
-        <activity
-            android:name=".LoadingRecap"
-            android:exported="true" />
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="true" /> <!-- TULIS DI SINI BIAR jadi entry point -->
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".CalendarHomeActivity" />
+        <activity android:name=".CalendarRecap" />
+
+
+<!--                <activity android:name=".CalendarRecap" android:exported="false" />-->
+
+<!--        <activity android:name=".LoadingRecap" android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
+        <!-- <activity -->
+        <!-- android:name=".TestingActivity" -->
+        <!-- android:exported="false" /> -->
+        <!-- Coba ini gua ya -->
+<!--        <activity-->
+<!--            android:name=".AvatarActivity"-->
+<!--            android:exported="true">-->
+
+<!--            &lt;!&ndash; This makes AvatarActivity the app's entry point &ndash;&gt;-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
     </application>
 
 </manifest>

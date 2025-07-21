@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/indicator_strip_view"
+    android:layout_width="20dp"
+    android:layout_height="4dp"
+    android:background="@drawable/card_progress"
+    android:layout_marginEnd="4dp"
+    android:minWidth="0dp"
+    android:minHeight="0dp" />

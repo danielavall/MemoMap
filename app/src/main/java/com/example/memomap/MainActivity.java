@@ -6,12 +6,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.View; // Import View
 
 import com.example.memomap.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomappbar.BottomAppBar; // Import BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton; // Import FloatingActionButton
 
 public class MainActivity extends AppCompatActivity {
+
     ActivityMainBinding binding;
+
+    private BottomNavigationView bottomNavigationView;
+    private BottomAppBar bottomAppBar; // Deklarasi BottomAppBar
+    private FloatingActionButton fabJournal; // Deklarasi FloatingActionButton
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,17 +27,15 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Cek apakah ada navigasi dari intent
-        String navigateTo = getIntent().getStringExtra("navigate_to");
+        // Inisialisasi semua elemen dari binding
+        bottomNavigationView = binding.bottomNavigationView;
+        bottomAppBar = binding.bottomAppBar; // Inisialisasi BottomAppBar
+        fabJournal = binding.fabJournal; // Inisialisasi FloatingActionButton
 
-        if ("home".equals(navigateTo)) {
-            replaceFragment(new HomeFragment());
-            binding.bottomNavigationView.setSelectedItemId(R.id.home); // sesuaikan dengan ID item di nav
-        } else {
-            replaceFragment(new HomeFragment()); // default saat pertama buka
-        }
-
+        replaceFragment(new HomeFragment());
+        // Mengatur background null untuk bottomNavigationView (ini sudah ada di kode Anda)
         binding.bottomNavigationView.setBackground(null);
+
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
@@ -47,8 +53,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.frame_layout, fragment); // pastikan ID ini sesuai dengan layout kamu
-        transaction.commit();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
+    }
+
+    // Metode untuk menyembunyikan seluruh Bottom Nav Area (BottomNavigationView, BottomAppBar, FAB)
+    public void hideBottomNav() {
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setVisibility(View.GONE);
+        }
+        if (bottomAppBar != null) { // Sembunyikan BottomAppBar
+            bottomAppBar.setVisibility(View.GONE);
+        }
+        if (fabJournal != null) { // Sembunyikan FloatingActionButton
+            fabJournal.setVisibility(View.GONE);
+        }
+    }
+
+    // Metode untuk menampilkan seluruh Bottom Nav Area (BottomNavigationView, BottomAppBar, FAB)
+    public void showBottomNav() {
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
+        if (bottomAppBar != null) { // Tampilkan BottomAppBar
+            bottomAppBar.setVisibility(View.VISIBLE);
+        }
+        if (fabJournal != null) { // Tampilkan FloatingActionButton
+            fabJournal.setVisibility(View.VISIBLE);
+        }
     }
 }
