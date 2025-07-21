@@ -70,16 +70,21 @@ public class CalendarRecap extends AppCompatActivity {
         // --- Perubahan Baru: Terapkan Rounded Background dan Warna Biru pada Tombol Finish ---
         GradientDrawable finishButtonShape = new GradientDrawable();
         finishButtonShape.setShape(GradientDrawable.RECTANGLE);
-        finishButtonShape.setCornerRadius(50); // Sesuaikan radius sesuai keinginan
-        finishButtonShape.setColor(ContextCompat.getColor(this, R.color.blue)); // Menggunakan warna biru standar Android
-        finishButton.setBackground(finishButtonShape);
-        finishButton.setTextColor(ContextCompat.getColor(this, android.R.color.black)); // Teks hitam agar kontras (sebelumnya putih, disesuaikan agar sama seperti komponen lain yang ada di sini)
-        finishButton.setTypeface(null, Typeface.BOLD); // Opsional: teks tebal
+        finishButtonShape.setCornerRadius(100f); // Nilai tinggi tombol 40dp, radius 100f akan membuat dia sangat rounded/pill-shaped
+        finishButtonShape.setColor(ContextCompat.getColor(this, R.color.blue)); // Menggunakan warna dari R.color.blue
+        finishButton.setBackground(finishButtonShape); // Terapkan drawable ke background tombol
+        finishButton.setTextColor(ContextCompat.getColor(this, android.R.color.black)); // Teks hitam agar kontras (sesuai XML Anda)
+        // finishButton.setTypeface(null, Typeface.BOLD); // Tidak diminta, bisa dihapus jika tidak diperlukan
         // --- Akhir Perubahan Baru ---
 
         // BACA DATA DARI INTENT DAN INISIALISASI VARIABEL SELECTION
         Intent intent = getIntent();
+        // PERBAIKAN: Pastikan selectedCalendarType tidak null
         selectedCalendarType = intent.getStringExtra("type");
+        if (selectedCalendarType == null) {
+            selectedCalendarType = ""; // Beri nilai default kosong jika null
+        }
+
 
         // Ambil tahun/bulan/minggu saat ini dari sistem sebagai default jika tidak ada di intent
         Calendar currentCal = Calendar.getInstance();
@@ -124,7 +129,7 @@ public class CalendarRecap extends AppCompatActivity {
         populateWeekGrid();
 
         updateMonthGridDisplay();
-        updateWeekSelectionDisplay();
+        updateWeekSelectionDisplay(); // Memastikan pembaruan tampilan awal untuk minggu
 
         // --- PENTING: Update button visibility setelah inisialisasi ---
         updateNavigationButtonStates();
@@ -136,10 +141,11 @@ public class CalendarRecap extends AppCompatActivity {
             yearEnd = yearStart + 14; // Hitung yearEnd seperti biasa saat mundur
 
             // Jika yearStart mundur terlalu jauh ke belakang sebelum 15 tahun yang lalu dari MAX_YEAR
+            // (misal tahun 2010 atau lebih rendah, dan MAX_YEAR adalah 2025, maka MAX_YEAR - 14 = 2011)
             // dan yearEnd saat ini masih lebih besar dari MAX_YEAR, pastikan yearEnd tidak melebihi MAX_YEAR
             // Logika ini mungkin tidak terlalu krusial di sini karena fokus ke pembatasan maju.
             // Namun, ini mencegah tahunEnd secara aneh menjadi lebih besar dari MAX_YEAR setelah mundur.
-            if (yearEnd > MAX_YEAR) {
+            if (yearEnd > MAX_YEAR && yearStart < (MAX_YEAR - 14)) {
                 yearEnd = MAX_YEAR;
             }
 
@@ -269,7 +275,9 @@ public class CalendarRecap extends AppCompatActivity {
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             } else {
-                showWarningToast("Please select a valid " + selectedCalendarType.toLowerCase() + "!");
+                // PERBAIKAN: Pastikan selectedCalendarType tidak null saat membuat pesan Toast
+                String typeForToast = selectedCalendarType.isEmpty() ? "date" : selectedCalendarType.toLowerCase();
+                showWarningToast("Please select a valid " + typeForToast + "!");
             }
         });
     }
@@ -315,17 +323,22 @@ public class CalendarRecap extends AppCompatActivity {
         } else {
             btnYearRight.setEnabled(true);
         }
+        // Pastikan R.color.grey sudah didefinisikan di colors.xml
         btnYearRight.setColorFilter(ContextCompat.getColor(this, btnYearRight.isEnabled() ? android.R.color.black : R.color.grey));
+        // Tombol kiri tahun: asumsikan selalu bisa mundur kecuali ada batasan minimum yang eksplisit (tidak ada di kode ini)
+        btnYearLeft.setColorFilter(ContextCompat.getColor(this, android.R.color.black)); // Selalu hitam
 
         // Bulan & Minggu (tombol sama untuk keduanya)
         boolean canGoNextMonth = !(selectedYear == MAX_YEAR && selectedMonth >= MAX_MONTH_FOR_MAX_YEAR);
         btnMonthRight.setEnabled(canGoNextMonth);
         btnMonthRight.setColorFilter(ContextCompat.getColor(this, btnMonthRight.isEnabled() ? android.R.color.black : R.color.grey));
+        btnMonthLeft.setColorFilter(ContextCompat.getColor(this, android.R.color.black)); // Selalu hitam
 
         btnWeekRight.setEnabled(canGoNextMonth);
         btnWeekRight.setColorFilter(ContextCompat.getColor(this, btnWeekRight.isEnabled() ? android.R.color.black : R.color.grey));
+        btnWeekLeft.setColorFilter(ContextCompat.getColor(this, android.R.color.black)); // Selalu hitam
 
-        // Untuk tombol kiri, asumsikan selalu bisa mundur jauh ke belakang kecuali ada batasan minimum yang eksplisit
+        // Untuk tombol kiri, asumsikan selalu bisa mundur jauh ke belakang kecuali ada batasan minimum yang ingin diizinkan
         // Anda bisa menambahkan logika di sini jika ada tahun/bulan minimum yang ingin diizinkan
     }
 
@@ -366,12 +379,12 @@ public class CalendarRecap extends AppCompatActivity {
                 populateMonthGrid(); // Panggil lagi untuk render ulang bulan dengan pembatasan
                 updateMonthGridDisplay();
                 populateWeekGrid(); // Panggil lagi untuk render ulang minggu dengan pembatasan baru
-                updateWeekSelectionDisplay();
+                updateWeekSelectionDisplay(); // Panggil di sini juga untuk memastikan display minggu terupdate
                 updateNavigationButtonStates(); // Perbarui status tombol navigasi
             });
             yearGrid.addView(btn);
         }
-        updateYearSelection();
+        updateYearSelection(); // Panggil di sini untuk pertama kali
         updateNavigationButtonStates(); // Panggil setelah update grid
     }
 
@@ -401,14 +414,14 @@ public class CalendarRecap extends AppCompatActivity {
                 selectedMonth = index;
                 weekStart = 0;
                 weekEnd = 0;
-                updateMonthSelection();
+                updateMonthSelection(); // Call this method to update the appearance of month buttons
                 populateWeekGrid(); // Render ulang grid minggu karena bulan berubah
                 updateWeekSelectionDisplay();
                 updateNavigationButtonStates(); // Perbarui status tombol navigasi
             });
             monthGrid.addView(btn);
         }
-        updateMonthSelection();
+        updateMonthSelection(); // Call this method initially to set the correct appearance
         updateNavigationButtonStates(); // Panggil setelah update grid
     }
 
@@ -458,6 +471,7 @@ public class CalendarRecap extends AppCompatActivity {
                 isClickable = false;
             }
 
+            // PERUBAHAN DI SINI: Ganti "WEEK" menjadi "Week"
             Button btn = createItem("Week " + week, selected, true);
             btn.setEnabled(isClickable);
             if (!isClickable) {
@@ -488,41 +502,6 @@ public class CalendarRecap extends AppCompatActivity {
             weekGrid.addView(btn);
         }
         updateWeekSelectionDisplay();
-    }
-
-
-    private void updateYearSelection() {
-        for (int i = 0; i < yearGrid.getChildCount(); i++) {
-            Button btn = (Button) yearGrid.getChildAt(i);
-            boolean selected = Integer.parseInt(btn.getText().toString()) == selectedYear;
-            setupButtonAppearance(btn, selected, true);
-        }
-    }
-
-    private void updateMonthSelection() {
-        for (int i = 0; i < monthGrid.getChildCount(); i++) {
-            Button btn = (Button) monthGrid.getChildAt(i);
-            boolean selected = (i == selectedMonth);
-            setupButtonAppearance(btn, selected, true);
-        }
-    }
-
-    private void updateWeekSelectionDisplay() {
-        for (int i = 0; i < weekGrid.getChildCount(); i++) {
-            Button btn = (Button) weekGrid.getChildAt(i);
-            int weekNum = i + 1;
-
-            boolean selected = false;
-            if (weekStart != 0) {
-                if (weekEnd != 0) {
-                    selected = (weekNum >= weekStart && weekNum <= weekEnd);
-                } else {
-                    selected = (weekNum == weekStart);
-                }
-            }
-            setupButtonAppearance(btn, selected, true);
-        }
-        tvWeekMonth.setText(getMonthName(selectedMonth));
     }
 
 
@@ -562,6 +541,44 @@ public class CalendarRecap extends AppCompatActivity {
         return btn;
     }
 
+    // --- METODE BARU YANG DITAMBAHKAN ---
+    private void updateYearSelection() {
+        for (int i = 0; i < yearGrid.getChildCount(); i++) {
+            Button btn = (Button) yearGrid.getChildAt(i);
+            // Pastikan Anda membandingkan dengan nilai integer dari teks tombol
+            boolean selected = Integer.parseInt(btn.getText().toString()) == selectedYear;
+            setupButtonAppearance(btn, selected, true);
+        }
+    }
+
+    private void updateMonthSelection() {
+        for (int i = 0; i < monthGrid.getChildCount(); i++) {
+            Button btn = (Button) monthGrid.getChildAt(i);
+            boolean selected = (i == selectedMonth);
+            setupButtonAppearance(btn, selected, true);
+        }
+    }
+
+    private void updateWeekSelectionDisplay() { // Perbaikan: Hapus 'void' ganda di sini
+        for (int i = 0; i < weekGrid.getChildCount(); i++) {
+            Button btn = (Button) weekGrid.getChildAt(i);
+            int weekNum = i + 1; // Minggu dimulai dari 1
+
+            boolean selected = false;
+            if (weekStart != 0) {
+                if (weekEnd != 0) { // Jika rentang minggu dipilih
+                    selected = (weekNum >= weekStart && weekNum <= weekEnd);
+                } else { // Jika hanya satu minggu dipilih (weekEnd masih 0 atau sama dengan weekStart)
+                    selected = (weekNum == weekStart);
+                }
+            }
+            setupButtonAppearance(btn, selected, true);
+        }
+        // Pastikan juga TextView untuk bulan minggu diperbarui
+        tvWeekMonth.setText(getMonthName(selectedMonth) + " " + selectedYear);
+    }
+    // --- AKHIR METODE BARU YANG DITAMBAHKAN ---
+
 
     private String getMonthName(int index) {
         String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -576,6 +593,14 @@ public class CalendarRecap extends AppCompatActivity {
         // --- Validasi juga harus mempertimbangkan batas MAX_YEAR dan MAX_MONTH_FOR_MAX_YEAR ---
         if (selectedYear == 0) return false; // Tahun harus dipilih
 
+        // PERBAIKAN: Tambahkan pemeriksaan null untuk selectedCalendarType
+        if (selectedCalendarType == null || selectedCalendarType.isEmpty()) {
+            // Ini bisa terjadi jika Intent tidak membawa "type" atau string kosong
+            // Dalam kasus ini, kita bisa berasumsi bahwa setidaknya tahun harus dipilih
+            // atau tambahkan logika validasi default jika tidak ada tipe yang spesifik
+            return selectedYear != 0; // Minimal tahun harus dipilih
+        }
+
         switch (selectedCalendarType) {
             case "year":
                 return selectedYear != 0 && selectedYear <= MAX_YEAR;
@@ -586,7 +611,9 @@ public class CalendarRecap extends AppCompatActivity {
                 return selectedYear != 0 && selectedMonth != -1 && weekStart != 0 &&
                         (selectedYear < MAX_YEAR || (selectedYear == MAX_YEAR && selectedMonth <= MAX_MONTH_FOR_MAX_YEAR));
             default:
-                return false;
+                // Jika selectedCalendarType tidak cocok dengan kasus di atas,
+                // mungkin kita juga harus menganggapnya sebagai validasi dasar.
+                return false; // Atau return selectedYear != 0; tergantung kebutuhan Anda
         }
     }
 

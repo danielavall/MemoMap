@@ -45,26 +45,35 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="-3dp"
             android:fontFamily="@font/poppins_bold"
             android:paddingStart="25dp"
             android:text="Recap The Moment!"
             android:textColor="#000000"
-            android:textSize="24sp"/>
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/poppins_regular"
             android:paddingStart="25dp"
             android:paddingEnd="60dp"
             android:text="Sometimes you will never know the value of a moment until it becomes a memory."
             android:textAlignment="viewStart"
-            android:fontFamily="@font/poppins_regular"
             android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/profileIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/profile_icon"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="0dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Profile Icon" />
 
         <LinearLayout
             android:id="@+id/dateButtons"
@@ -74,8 +83,22 @@
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
             android:paddingHorizontal="16dp"
-            android:weightSum="4"
-            android:gravity="center_horizontal">
+            android:gravity="center">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/chooseDateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Choose Date"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="#000000"
+                android:background="@drawable/spinner_background"
+                android:backgroundTint="@color/green"
+                android:drawableEnd="@drawable/next_button_small"
+                android:paddingStart="32dp"
+                android:paddingEnd="70dp"
+                android:drawablePadding="-5dp"
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/yearButton"
@@ -83,13 +106,18 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/dropdown_recap_background"
-                android:backgroundTint="@null"
+                android:backgroundTint="@color/green"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Year"
+                android:text="2025"
                 android:textAllCaps="false"
                 android:textColor="#000000"
                 android:drawableEnd="@drawable/next_button_small"
-                android:paddingEnd="15dp" />
+                android:paddingStart="0dp"
+                android:paddingEnd="20dp"
+                android:layout_marginHorizontal="0dp"
+                android:gravity="center"
+                android:drawablePadding="0dp"
+                android:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/monthButton"
@@ -97,13 +125,18 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/dropdown_recap_background"
-                android:backgroundTint="@null"
+                android:backgroundTint="@color/green"
                 android:drawableEnd="@drawable/next_button_small"
                 android:fontFamily="@font/poppins_medium"
-                android:paddingEnd="15dp"
-                android:text="Month"
+                android:paddingStart="0dp"
+                android:paddingEnd="20dp"
+                android:layout_marginHorizontal="0dp"
+                android:gravity="center"
+                android:drawablePadding="0dp"
+                android:text="Jul"
                 android:textAllCaps="false"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/weekButton"
@@ -111,13 +144,18 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/dropdown_recap_background"
-                android:backgroundTint="@null"
+                android:backgroundTint="@color/green"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Week"
+                android:text="3"
                 android:textAllCaps="false"
                 android:textColor="#000000"
                 android:drawableEnd="@drawable/next_button_small"
-                android:paddingEnd="15dp" />
+                android:paddingStart="0dp"
+                android:paddingEnd="20dp"
+                android:layout_marginHorizontal="0dp"
+                android:gravity="center"
+                android:drawablePadding="0dp"
+                android:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/createButton"
@@ -125,9 +163,15 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:background="@drawable/spinner_background"
+                android:backgroundTint="#ADD8E6"
                 android:fontFamily="@font/poppins_bold"
                 android:text="Create!"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:layout_marginHorizontal="0dp"
+                android:visibility="visible" />
+
         </LinearLayout>
     </RelativeLayout>
 
@@ -156,10 +200,10 @@
             android:layout_marginTop="400dp"/>
 
         <ImageView
-        android:id="@+id/boat"
-        android:layout_width="550dp"
-        android:layout_height="600dp"
-        android:src="@drawable/boat" />
+            android:id="@+id/boat"
+            android:layout_width="550dp"
+            android:layout_height="600dp"
+            android:src="@drawable/boat" />
     </LinearLayout>
 
     <FrameLayout

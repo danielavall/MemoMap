@@ -37,6 +37,7 @@ public class RecapFragment extends Fragment {
 
     private ImageButton backButtonRecapCards;
 
+    private Button chooseDateButton;
     private Button yearButton, monthButton, weekButton;
     private Button createButton;
 
@@ -46,14 +47,13 @@ public class RecapFragment extends Fragment {
 
     private int selectedYear = 0;
     private int weekStart = 0;
-    private int weekEnd = 0; // Tetap 0 sebagai indikator "tidak dipilih" atau "single week" jika weekStart saja yang ada
+    private int weekEnd = 0;
     private int selectedMonth = -1;
 
     private TextView title, subtitle;
-    private LinearLayout dateButtons;
+    private LinearLayout dateButtons; // LinearLayout yang membungkus tombol-tombol
 
-    // private TextView quoteTextView; // HAPUS ATAU UBAH INI JIKA SUDAH TIDAK ADA DI XML DENGAN ID INI
-    private TextView tvLoadingQuote; // Deklarasi baru untuk TextView kutipan
+    private TextView tvLoadingQuote;
     private LinearLayout loadingScreenLayout;
     private RelativeLayout layoutMainContent;
     private LinearLayout hintLayout;
@@ -88,13 +88,14 @@ public class RecapFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_recap, container, false);
 
+        chooseDateButton = rootView.findViewById(R.id.chooseDateButton);
         yearButton = rootView.findViewById(R.id.yearButton);
         monthButton = rootView.findViewById(R.id.monthButton);
         weekButton = rootView.findViewById(R.id.weekButton);
         createButton = rootView.findViewById(R.id.createButton);
 
         boatImage = rootView.findViewById(R.id.boat);
-        tvLoadingQuote = rootView.findViewById(R.id.tv_loading_quote); // Inisialisasi TextView kutipan yang baru
+        tvLoadingQuote = rootView.findViewById(R.id.tv_loading_quote);
 
         textHint = rootView.findViewById(R.id.textHint);
         arrowHint = rootView.findViewById(R.id.arrowHint);
@@ -109,19 +110,23 @@ public class RecapFragment extends Fragment {
 
         title = rootView.findViewById(R.id.title);
         subtitle = rootView.findViewById(R.id.subtitle);
-        dateButtons = rootView.findViewById(R.id.dateButtons);
+        dateButtons = rootView.findViewById(R.id.dateButtons); // Inisialisasi LinearLayout parent
         layoutMainContent = rootView.findViewById(R.id.layout_main_content);
 
+        if (textHint != null) {
+            textHint.setGravity(Gravity.CENTER_HORIZONTAL);
+            int paddingHorizontal = (int) (getResources().getDisplayMetrics().density * 24);
+            textHint.setPadding(paddingHorizontal, textHint.getPaddingTop(), paddingHorizontal, textHint.getPaddingBottom());
+        }
 
         // Pastikan semua view berhasil ditemukan, ini penting untuk debugging
-        // Sesuaikan pengecekan quoteTextView menjadi tvLoadingQuote
         if (boatImage == null || textHint == null || arrowHint == null || layoutRecap == null ||
                 linearLayoutIndicator == null || backButtonRecapCards == null ||
-                tvLoadingQuote == null || loadingScreenLayout == null || layoutMainContent == null || // tvLoadingQuote yang diperiksa
+                tvLoadingQuote == null || loadingScreenLayout == null || layoutMainContent == null ||
                 title == null || subtitle == null || dateButtons == null ||
+                chooseDateButton == null ||
                 yearButton == null || monthButton == null || weekButton == null || createButton == null || hintLayout == null) {
             Log.e("RecapFragment", "View from fragment_recap.xml not found! Check IDs or includes.");
-            // Anda bisa menambahkan Toast atau penanganan error lain di sini jika diperlukan
         }
 
         calendarRecapLauncher = registerForActivityResult(
@@ -134,38 +139,66 @@ public class RecapFragment extends Fragment {
                             int year = data.getIntExtra("year", 0);
                             int month = data.getIntExtra("month", -1);
                             int weekStart = data.getIntExtra("weekStart", 0);
-                            int weekEnd = data.getIntExtra("weekEnd", 0); // Pastikan ini juga diambil
+                            int weekEnd = data.getIntExtra("weekEnd", 0);
 
                             boolean dateSelected = data.getBooleanExtra("dateSelected", false);
 
                             if (dateSelected) {
+                                // Jika tanggal dipilih, perbarui tombol dan tampilkan 3 tombol + Create!
                                 updateDateButtons(type, year, month, weekStart, weekEnd);
+                                showDetailedDateButtons(); // Panggil method untuk menampilkan 3 tombol
                                 if (textHint != null) {
-                                    textHint.setText("Click 'Create!' button!");
+                                    textHint.setText("Make sure the date you selected is correct, then \nClick 'Create!' button!");
                                     arrowHint.setVisibility(View.GONE);
+
+                                    // MODIFIED: Turunkan sedikit textHint
+                                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textHint.getLayoutParams();
+                                    // Menggunakan margin top untuk menurunkan. Sesuaikan nilai 16dp sesuai kebutuhan.
+                                    // Anda juga bisa menambahkan padding top jika tidak ingin mempengaruhi layout induk.
+                                    params.topMargin = (int) (getResources().getDisplayMetrics().density * 16); // Menambahkan margin top 16dp
+                                    textHint.setLayoutParams(params);
                                 }
                             } else {
                                 Log.d("RecapFragment", "No valid date selected from CalendarRecap, maintaining previous selection state.");
+                                // Jika tidak ada tanggal yang dipilih, kembali ke state "Choose Date"
+                                resetToInitialState();
                             }
                         }
                     } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
                         Log.d("RecapFragment", "CalendarRecap canceled by system back button.");
+                        // Jika dibatalkan, kembali ke state "Choose Date"
+                        resetToInitialState();
                     }
                 }
         );
 
+        // Atur tampilan awal
+        resetToInitialState(); // Panggil resetToInitialState() untuk mengatur kondisi awal
+
+        // Set text for the individual date buttons if they are ever visible later
         if (yearButton != null) yearButton.setText("Year");
         if (monthButton != null) monthButton.setText("Month");
         if (weekButton != null) weekButton.setText("Week");
 
-        showHintState();
+        // Listener untuk tombol Choose Date
+        if (chooseDateButton != null) {
+            chooseDateButton.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), CalendarRecap.class);
+                Calendar currentCal = Calendar.getInstance();
+                intent.putExtra("currentYear", currentCal.get(Calendar.YEAR));
+                intent.putExtra("currentMonth", currentCal.get(Calendar.MONTH));
+                intent.putExtra("currentWeekStart", 0);
+                intent.putExtra("currentWeekEnd", 0);
+                calendarRecapLauncher.launch(intent);
+            });
+        }
 
+        // Listener untuk tombol Year, Month, Week (sudah ada, tidak perlu diubah lagi)
         yearButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), CalendarRecap.class);
             intent.putExtra("type", "year");
             if (selectedYear != 0) intent.putExtra("currentYear", selectedYear);
             if (selectedMonth != -1) intent.putExtra("currentMonth", selectedMonth);
-            // Kirim weekStart dan weekEnd saat ini agar CalendarRecap bisa menampilkan pilihan sebelumnya
             if (weekStart != 0) intent.putExtra("currentWeekStart", weekStart);
             if (weekEnd != 0) intent.putExtra("currentWeekEnd", weekEnd);
             calendarRecapLauncher.launch(intent);
@@ -176,7 +209,6 @@ public class RecapFragment extends Fragment {
             intent.putExtra("type", "month");
             if (selectedYear != 0) intent.putExtra("currentYear", selectedYear);
             if (selectedMonth != -1) intent.putExtra("currentMonth", selectedMonth);
-            // Kirim weekStart dan weekEnd saat ini agar CalendarRecap bisa menampilkan pilihan sebelumnya
             if (weekStart != 0) intent.putExtra("currentWeekStart", weekStart);
             if (weekEnd != 0) intent.putExtra("currentWeekEnd", weekEnd);
             calendarRecapLauncher.launch(intent);
@@ -187,8 +219,6 @@ public class RecapFragment extends Fragment {
             intent.putExtra("type", "week");
             if (selectedYear != 0) intent.putExtra("currentYear", selectedYear);
             if (selectedMonth != -1) intent.putExtra("currentMonth", selectedMonth);
-            // Kirim weekStart dan weekEnd apa adanya. CalendarRecap yang akan menentukan apakah itu single atau range.
-            // Jika single week, CalendarRecap harusnya mengembalikan weekEnd == weekStart atau weekEnd == 0 (jika Anda mendefinisikannya begitu).
             if (weekStart != 0) {
                 intent.putExtra("currentWeekStart", weekStart);
                 intent.putExtra("currentWeekEnd", weekEnd);
@@ -201,17 +231,28 @@ public class RecapFragment extends Fragment {
 
             boolean isYearSelected = (selectedYear != 0);
             boolean isMonthSelected = (selectedMonth != -1);
-            // Kunci perubahan di sini:
-            // isWeekSelected true jika weekStart memiliki nilai (baik itu single week atau range)
             boolean isWeekSelected = (weekStart != 0);
 
+            // Validasi harus juga mempertimbangkan jika user langsung klik create tanpa choose date
+            // Jika tombol Choose Date terlihat, berarti belum ada tanggal yang dipilih secara spesifik
+            if (chooseDateButton != null && chooseDateButton.getVisibility() == View.VISIBLE) {
+                if (getContext() != null) {
+                    Toast toast = Toast.makeText(getContext(), "Please choose your memorable date first!", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 50);
+                    toast.show();
+                }
+                Log.d("RecapFragment", "Validation failed: No specific date selected (Choose Date button is visible).");
+                return;
+            }
+
+            // Validasi ini hanya relevan jika tombol Year/Month/Week sudah terlihat
             if (!isYearSelected && !isMonthSelected && !isWeekSelected) {
                 if (getContext() != null) {
                     Toast toast = Toast.makeText(getContext(), "Please choose your memorable date first!", Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 50); // MUNCUL DARI ATAS KE BAWAH
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 50);
                     toast.show();
                 }
-                Log.d("RecapFragment", "Validation failed: No date selected.");
+                Log.d("RecapFragment", "Validation failed: No date selected from Year/Month/Week.");
                 return;
             }
 
@@ -241,26 +282,165 @@ public class RecapFragment extends Fragment {
             }, 5000);
         });
 
+        // MODIFIED: Logic for back button from recap cards
         backButtonRecapCards.setOnClickListener(v -> {
             Log.d("RecapFragment", "Tombol Back Recap Cards diklik!");
-            resetToInitialState();
+            // Check current selection state to return to the correct view
+            if (selectedYear != 0 || selectedMonth != -1 || (this.weekStart != 0)) {
+                // If a date was selected, show the Year/Month/Week buttons
+                showDetailedDateButtons();
+                updateDateButtons("", selectedYear, selectedMonth, weekStart, weekEnd); // Re-set text for chosen date
+                if (textHint != null) {
+                    textHint.setText("Make sure the date you selected is correct and Click 'Create!' button!");
+                    arrowHint.setVisibility(View.GONE);
+                    // Reset margin top when returning to this state
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textHint.getLayoutParams();
+                    params.topMargin = (int) (getResources().getDisplayMetrics().density * 16); // Restore the added margin
+                    textHint.setLayoutParams(params);
+                }
+            } else {
+                // Otherwise, revert to the initial "Choose Date" state
+                showInitialDateButtons();
+                if (textHint != null) {
+                    textHint.setText("Choose your memorable date!");
+                    arrowHint.setVisibility(View.VISIBLE);
+                    // Reset margin top to initial state (0 or default from XML)
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textHint.getLayoutParams();
+                    params.topMargin = 0; // Reset margin top
+                    textHint.setLayoutParams(params);
+                }
+            }
+            showHintState(); // Make sure other UI elements are shown/hidden correctly
+            if (getActivity() instanceof MainActivity) {
+                Log.d("RecapFragment", "Calling showBottomNav() on MainActivity from back button handler.");
+                ((MainActivity) requireActivity()).showBottomNav();
+            } else {
+                Log.e("RecapFragment", "Activity is not MainActivity when trying to show bottom nav.");
+            }
         });
 
         return rootView;
     }
 
+    // --- Method untuk menampilkan state tombol awal (Choose Date + Create!) ---
+    private void showInitialDateButtons() {
+        if (dateButtons != null) {
+            dateButtons.setWeightSum(4); // Set weightSum ke 4 agar Choose Date bisa mengambil 3 bagian
+            dateButtons.setGravity(Gravity.CENTER_HORIZONTAL); // Pastikan gravity tetap center
+        }
+
+        if (chooseDateButton != null) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) chooseDateButton.getLayoutParams();
+            params.width = 0; // Menggunakan 0dp agar weight berlaku
+            params.weight = 3; // Mengambil 3 bagian dari 4
+            params.height = (int) (40 * getResources().getDisplayMetrics().density); // Sesuaikan tinggi dengan tombol lain
+            // HAPUS ATAU UBAH INI MENJADI 0: params.setMarginEnd((int) (8 * getResources().getDisplayMetrics().density)); // Tambahkan marginEnd
+            params.setMarginEnd(0); // Menghilangkan margin
+            chooseDateButton.setLayoutParams(params);
+            chooseDateButton.setVisibility(View.VISIBLE);
+        }
+        if (yearButton != null) yearButton.setVisibility(View.GONE);
+        if (monthButton != null) monthButton.setVisibility(View.GONE);
+        if (weekButton != null) weekButton.setVisibility(View.GONE);
+
+        if (createButton != null) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) createButton.getLayoutParams();
+            params.width = 0; // Menggunakan 0dp agar weight berlaku
+            params.weight = 1; // Mengambil 1 bagian dari 4
+            params.height = (int) (48 * getResources().getDisplayMetrics().density); // Pertahankan tinggi 48dp
+            params.setMarginStart(0); // Menghilangkan margin
+            createButton.setLayoutParams(params);
+            createButton.setVisibility(View.VISIBLE); // Pastikan Create! selalu terlihat
+        }
+    }
+
+    // --- Method untuk menampilkan state tombol detail (Year + Month + Week + Create!) ---
+    private void showDetailedDateButtons() {
+        if (dateButtons != null) {
+            dateButtons.setWeightSum(4); // Kembali ke weightSum 4
+            dateButtons.setGravity(Gravity.CENTER_HORIZONTAL); // Pastikan gravity tetap center
+        }
+
+        if (chooseDateButton != null) chooseDateButton.setVisibility(View.GONE);
+        if (yearButton != null) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) yearButton.getLayoutParams();
+            params.width = 0;
+            params.weight = 1;
+            params.height = (int) (40 * getResources().getDisplayMetrics().density);
+            params.setMarginEnd(0); // Menghilangkan margin
+            yearButton.setLayoutParams(params);
+            yearButton.setVisibility(View.VISIBLE);
+        }
+        if (monthButton != null) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) monthButton.getLayoutParams();
+            params.width = 0;
+            params.weight = 1;
+            params.height = (int) (40 * getResources().getDisplayMetrics().density);
+            params.setMarginStart(0); // Menghilangkan margin
+            params.setMarginEnd(0); // Menghilangkan margin
+            monthButton.setLayoutParams(params);
+            monthButton.setVisibility(View.VISIBLE);
+        }
+        if (weekButton != null) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) weekButton.getLayoutParams();
+            params.width = 0;
+            params.weight = 1;
+            params.height = (int) (40 * getResources().getDisplayMetrics().density);
+            params.setMarginStart(0); // Menghilangkan margin
+            params.setMarginEnd(0); // Menghilangkan margin
+            weekButton.setLayoutParams(params);
+            weekButton.setVisibility(View.VISIBLE);
+        }
+
+        if (createButton != null) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) createButton.getLayoutParams();
+            params.width = 0; // Tetap 0dp
+            params.weight = 1; // Tetap 1
+            params.height = (int) (48 * getResources().getDisplayMetrics().density); // Pertahankan tinggi 48dp
+            params.setMarginStart(0); // Menghilangkan margin
+            createButton.setLayoutParams(params);
+            createButton.setVisibility(View.VISIBLE); // Pastikan Create! selalu terlihat
+        }
+    }
+
     public void resetToInitialState() {
         Log.d("RecapFragment", "resetToInitialState() called.");
-        selectedYear = 0;
-        selectedMonth = -1;
-        weekStart = 0;
-        weekEnd = 0; // Reset weekEnd juga
+        // Note: selectedYear, selectedMonth, weekStart, weekEnd are NOT reset here
+        // as they hold the *last chosen date* state which we want to return to.
+        // We only reset them if the user explicitly clears the selection.
 
-        if (yearButton != null) yearButton.setText("Year");
-        if (monthButton != null) monthButton.setText("Month");
-        if (weekButton != null) weekButton.setText("Week");
+        // This method is now used for initial setup and for returning from CalendarRecap if cancelled
+        // For returning from Recap Cards, we have specific logic in backButtonRecapCards.setOnClickListener
+
+        // Only reset if no date was previously selected, or if we want a hard reset
+        if (selectedYear == 0 && selectedMonth == -1 && weekStart == 0) {
+            showInitialDateButtons(); // Show 'Choose Date' if no date was picked yet
+        } else {
+            // If a date was selected, show the detailed buttons
+            showDetailedDateButtons();
+            updateDateButtons("", selectedYear, selectedMonth, weekStart, weekEnd);
+        }
+
+        // Reset teks tombol individu ke defaultnya jika visible
+        if (yearButton != null) {
+            if (selectedYear == 0) yearButton.setText("Year");
+        }
+        if (monthButton != null) {
+            if (selectedMonth == -1) monthButton.setText("Month");
+        }
+        if (weekButton != null) {
+            if (weekStart == 0) weekButton.setText("Week");
+        }
 
         showHintState();
+
+        // MODIFIED: Reset margin top textHint in resetToInitialState
+        if (textHint != null) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textHint.getLayoutParams();
+            params.topMargin = 0; // Reset margin top to its original value (or 0 if not set in XML)
+            textHint.setLayoutParams(params);
+        }
+
 
         if (getActivity() instanceof MainActivity) {
             Log.d("RecapFragment", "Calling showBottomNav() on MainActivity from resetToInitialState.");
@@ -273,35 +453,28 @@ public class RecapFragment extends Fragment {
     private void showHintState() {
         if (layoutMainContent != null) layoutMainContent.setVisibility(View.VISIBLE);
         if (hintLayout != null) hintLayout.setVisibility(View.VISIBLE);
-        if (arrowHint != null) arrowHint.setVisibility(View.VISIBLE);
-        if (textHint != null) {
-            textHint.setVisibility(View.VISIBLE);
-            textHint.setText("Choose your memorable date!");
-        }
+        // Hint visibility for arrow and text are handled in resetToInitialState and updateDateButtons
+        // This method only ensures the parent layouts are visible.
 
         if (loadingScreenLayout != null) loadingScreenLayout.setVisibility(View.GONE);
-        if (tvLoadingQuote != null) tvLoadingQuote.setVisibility(View.GONE); // Menggunakan tvLoadingQuote
+        if (tvLoadingQuote != null) tvLoadingQuote.setVisibility(View.GONE);
         if (boatImage != null) boatImage.setVisibility(View.GONE);
 
         if (layoutRecap != null) layoutRecap.setVisibility(View.GONE);
+        if (backButtonRecapCards != null) backButtonRecapCards.setVisibility(View.GONE);
         if (viewPagerRecap != null) viewPagerRecap.setVisibility(View.GONE);
         if (linearLayoutIndicator != null) linearLayoutIndicator.setVisibility(View.GONE);
-        if (backButtonRecapCards != null) backButtonRecapCards.setVisibility(View.GONE);
     }
 
     private void showLoading() {
         if (loadingScreenLayout != null) loadingScreenLayout.setVisibility(View.VISIBLE);
-        if (tvLoadingQuote != null) { // Menggunakan tvLoadingQuote
+        if (tvLoadingQuote != null) {
             tvLoadingQuote.setVisibility(View.VISIBLE);
         }
         if (boatImage != null) boatImage.setVisibility(View.VISIBLE);
 
-        // layout_main_content TETAP TERLIHAT, jadi baris ini tidak dihapus.
-        // if (layoutMainContent != null) layoutMainContent.setVisibility(View.GONE);
+        if (hintLayout != null) hintLayout.setVisibility(View.GONE);
 
-        if (hintLayout != null) hintLayout.setVisibility(View.GONE); // Pastikan hintLayout tetap disembunyikan
-
-        // Pastikan layout Recap Cards juga tersembunyi
         if (layoutRecap != null) layoutRecap.setVisibility(View.GONE);
         if (backButtonRecapCards != null) backButtonRecapCards.setVisibility(View.GONE);
         if (viewPagerRecap != null) viewPagerRecap.setVisibility(View.GONE);
@@ -310,7 +483,7 @@ public class RecapFragment extends Fragment {
 
     private void hideLoading() {
         if (loadingScreenLayout != null) loadingScreenLayout.setVisibility(View.GONE);
-        if (tvLoadingQuote != null) tvLoadingQuote.setVisibility(View.GONE); // Menggunakan tvLoadingQuote
+        if (tvLoadingQuote != null) tvLoadingQuote.setVisibility(View.GONE);
         if (boatImage != null) boatImage.setVisibility(View.GONE);
     }
 
@@ -322,7 +495,7 @@ public class RecapFragment extends Fragment {
             if (backButtonRecapCards != null) backButtonRecapCards.setVisibility(View.VISIBLE);
         }
 
-        if (layoutMainContent != null) layoutMainContent.setVisibility(View.GONE); // Sembunyikan main content saat recap cards muncul
+        if (layoutMainContent != null) layoutMainContent.setVisibility(View.GONE);
         if (hintLayout != null) hintLayout.setVisibility(View.GONE);
         if (loadingScreenLayout != null) loadingScreenLayout.setVisibility(View.GONE);
 
@@ -411,7 +584,7 @@ public class RecapFragment extends Fragment {
         this.selectedYear = year;
         this.selectedMonth = month;
         this.weekStart = weekStart;
-        this.weekEnd = weekEnd; // Pastikan weekEnd juga di-update
+        this.weekEnd = weekEnd;
 
         // Update Year Button
         if (yearButton != null) {
@@ -432,30 +605,37 @@ public class RecapFragment extends Fragment {
             }
         }
 
-        // Update Week Button - Kunci perubahan di sini untuk single week
+        // Update Week Button
         if (weekButton != null) {
-            if (this.weekStart != 0) { // Jika weekStart ada, berarti ada pilihan minggu
-                if (this.weekEnd != 0 && this.weekStart != this.weekEnd) { // Jika range (weekEnd berbeda dari 0 dan weekStart)
+            if (this.weekStart != 0) {
+                if (this.weekEnd != 0 && this.weekStart != this.weekEnd) {
                     weekButton.setText(this.weekStart + "-" + this.weekEnd);
-                } else { // Ini berarti single week (weekEnd adalah 0 atau sama dengan weekStart)
+                } else {
                     weekButton.setText(String.valueOf(this.weekStart));
                 }
-            } else { // Belum ada minggu yang dipilih
+            } else {
                 weekButton.setText("Week");
             }
         }
 
-        // Logika untuk menampilkan/menyembunyikan hint
-        // Validasi di sini juga diubah untuk mengizinkan weekStart saja
+        // Logika untuk menampilkan/menyembunyikan hint (TIDAK BERUBAH)
         if (selectedYear != 0 || selectedMonth != -1 || (this.weekStart != 0)) {
             if (textHint != null) {
-                textHint.setText("Click 'Create!' button!");
+                textHint.setText("Make sure the date you selected is correct and Click 'Create!' button!");
                 arrowHint.setVisibility(View.GONE);
+                // MODIFIED: Turunkan sedikit textHint saat tanggal dipilih
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textHint.getLayoutParams();
+                params.topMargin = (int) (getResources().getDisplayMetrics().density * 16); // Menambahkan margin top 16dp
+                textHint.setLayoutParams(params);
             }
         } else {
             if (textHint != null) {
                 textHint.setText("Choose your memorable date!");
                 arrowHint.setVisibility(View.VISIBLE);
+                // Reset margin top saat tidak ada tanggal dipilih
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textHint.getLayoutParams();
+                params.topMargin = 0; // Reset margin top
+                textHint.setLayoutParams(params);
             }
         }
     }
@@ -476,9 +656,7 @@ public class RecapFragment extends Fragment {
         super.onDestroyView();
         if (viewPagerRecap != null && pageChangeCallback != null) {
             viewPagerRecap.unregisterOnPageChangeCallback(pageChangeCallback);
-            Log.d("RecapFragment", "onDestroyView: onPageChangeCallback unregistered.");
+            Log.d("RecapFragment", "onDestroyView: ViewPager2 OnPageChangeCallback unregistered.");
         }
-        // Pastikan tidak ada referensi ke rootView setelah onDestroyView
-        rootView = null;
     }
 }
