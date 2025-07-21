@@ -26,6 +26,7 @@
         <activity android:name=".CalendarHomeActivity" />
         <activity android:name=".CalendarRecap" />
         <activity android:name=".FullMonthActivity" />
+        <activity android:name=".ProfileActivity" />
 
 
 <!--                <activity android:name=".CalendarRecap" android:exported="false" />-->

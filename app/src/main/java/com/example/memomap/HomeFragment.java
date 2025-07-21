@@ -41,6 +41,9 @@ public class HomeFragment extends Fragment {
     // Keep track of the actual current date (today) for future/past logic
     private Calendar todayCalendar;
 
+    // Tambahkan deklarasi untuk btn_profile
+    private ImageButton btnProfile;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -49,7 +52,6 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize currentCalendar to January 2025 as per your initial data
         currentCalendar = Calendar.getInstance();
         currentCalendar.set(Calendar.YEAR, 2025);
         currentCalendar.set(Calendar.MONTH, Calendar.JANUARY); // January is 0
@@ -116,6 +118,18 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        // TEMUKAN btn_profile DAN TAMBAHKAN LISTENER-NYA DI SINI
+        btnProfile = view.findViewById(R.id.btn_profile);
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Buat Intent untuk memulai ProfileActivity
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent); // Mulai aktivitas ProfileActivity
+            }
+        });
+
 
         // Initial setup of the calendar and journal data
         updateCalendarUI();
