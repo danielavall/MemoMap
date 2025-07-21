@@ -15,15 +15,28 @@ import java.util.List;
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder> {
 
     private List<Goal> goalList;
+    private OnGoalStatusChangeListener listener; // Listener untuk komunikasi ke Fragment
 
     public GoalAdapter(List<Goal> goalList) {
         this.goalList = goalList;
     }
 
+    // Metode untuk memperbarui data di adapter
+    public void updateList(List<Goal> newList) {
+        this.goalList.clear();
+        this.goalList.addAll(newList);
+        notifyDataSetChanged(); // Memberi tahu RecyclerView untuk me-refresh
+    }
+
+    // Setter untuk listener
+    public void setOnGoalStatusChangeListener(OnGoalStatusChangeListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public GoalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.goals_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_goals, parent, false);
         return new GoalViewHolder(view);
     }
 
@@ -33,29 +46,28 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
 
         holder.titleTextView.setText(currentGoal.getTitle());
         holder.labelTextView.setText(currentGoal.getLabel());
+
+        // Hapus listener sebelumnya sebelum mengatur yang baru untuk menghindari masalah daur ulang
+        holder.checkBox.setOnCheckedChangeListener(null);
         holder.checkBox.setChecked(currentGoal.isCompleted());
 
-        // --- Logika untuk mengubah latar belakang label ---
-        String label = currentGoal.getLabel();
-        if ("Task".equals(label)) {
-            // Jika label adalah "Task", gunakan latar belakang default (bg_label_task)
-            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_task);
-        } else if ("Goal".equals(label)) {
-            // Jika label adalah "Goal", gunakan latar belakang ungu (bg_label_goal)
-            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_goal);
-        } else {
-            // Opsional: Jika ada jenis label lain yang tidak Task atau Goal,
-            // Anda bisa menetapkan latar belakang default atau yang lain di sini
-            // Misalnya: holder.labelTextView.setBackgroundResource(R.drawable.bg_label_task);
-        }
-        // --- Akhir logika latar belakang label ---
-
-
+        // Atur listener baru
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             currentGoal.setCompleted(isChecked);
-            // Anda mungkin ingin memberi tahu adapter bahwa item telah berubah
-            // notifyItemChanged(position); // Hati-hati dengan ini di dalam onBindViewHolder jika ada banyak perubahan
+            // Beri tahu Fragment bahwa status goal telah berubah
+            if (listener != null) {
+                listener.onGoalStatusChanged();
+            }
         });
+
+        // Logika untuk mengubah latar belakang label
+        String label = currentGoal.getLabel();
+        if ("Task".equals(label)) {
+            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_task);
+        } else if ("Goal".equals(label)) {
+            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_goal);
+        }
+        // Tambahkan else jika ada kondisi label lain yang perlu background berbeda
     }
 
     @Override
@@ -74,5 +86,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
             labelTextView = itemView.findViewById(R.id.label_text);
             checkBox = itemView.findViewById(R.id.checkbox);
         }
+    }
+
+    // Interface untuk komunikasi dari Adapter ke Fragment
+    public interface OnGoalStatusChangeListener {
+        void onGoalStatusChanged();
     }
 }
