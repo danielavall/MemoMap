@@ -77,7 +77,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
                 context.startActivity(intent);
             } else {
-                Toast.makeText(context, "Belum tersedia untuk bulan " + month, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Not available for " + month, Toast.LENGTH_SHORT).show();
             }
         });
 
