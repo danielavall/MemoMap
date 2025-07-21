@@ -1,18 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:background="@color/white">
 
     <EditText
         android:id="@+id/input_goal"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/input_text_here"
         android:textSize="20sp"
-        android:paddingHorizontal="7dp"
-        tools:ignore="MissingConstraints"/>
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:background="@drawable/rounded_edittext_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:minHeight="48dp"
+        android:fontFamily="@font/poppins_regular"/>
+
+    <RadioGroup
+        android:id="@+id/radio_group_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/input_goal"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp">
+
+        <RadioButton
+            android:id="@+id/radio_goal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/goal"
+            android:checked="true"
+            android:buttonTint="@color/blue"
+            android:fontFamily="@font/poppins_regular"/>
+
+        <RadioButton
+            android:id="@+id/radio_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/task"
+            android:layout_marginStart="16dp"
+            android:buttonTint="@color/blue"
+            android:fontFamily="@font/poppins_regular"/>
+    </RadioGroup>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/send_goal_button"
@@ -20,9 +64,12 @@
         android:layout_height="wrap_content"
         android:src="@drawable/icon_send"
         android:contentDescription="@string/send_goal_button"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/input_goal"
-        />
+        app:layout_constraintTop_toBottomOf="@id/input_goal" app:tint="@android:color/black"
+        app:backgroundTint="@color/blue"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

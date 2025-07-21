@@ -39,6 +39,7 @@
     <string name="video_count">%1$d video</string>
     <string name="video_count_plural">%1$d videos</string>
     <string name="btn_calendar">btn_calendar</string>
+    <string name="task">Task</string>
 
     <plurals name="photo_count_plural">
         <item quantity="one">%d photo</item>
@@ -98,6 +99,11 @@
     <string name="_2025">2025</string>
     <string name="_2026">2026</string>
     <string name="_2027">2027</string>
+    <string name="goal">Goal</string>
+    <string name="all">All</string>
+    <string name="tasks">Tasks</string>
+    <string name="goals">Goals</string>
+    <string name="done">Done</string>
 
 
 </resources>
