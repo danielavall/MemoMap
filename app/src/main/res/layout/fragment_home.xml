@@ -212,23 +212,25 @@
 
             <TextView
                 android:id="@+id/text_month_nov"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/header_nov"
-            android:fontFamily="@font/poppins_bold"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginHorizontal="6dp"/>
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:text="@string/header_nov"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginHorizontal="6dp"/>
 
             <TextView
                 android:id="@+id/text_month_dec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/header_dec"
-            android:fontFamily="@font/poppins_bold"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginHorizontal="6dp"/>
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:text="@string/header_dec"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginHorizontal="6dp"/>
 
             <ImageButton
                 android:id="@+id/btn_previous"
@@ -240,12 +242,13 @@
 
             <TextView
                 android:id="@+id/text_month_current"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/header_jan"
-            android:fontFamily="@font/poppins_bold"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:text="@string/header_jan"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:gravity="center" />
 
             <ImageButton
                 android:id="@+id/btn_next"
@@ -257,23 +260,25 @@
 
             <TextView
                 android:id="@+id/text_month_feb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/header_feb"
-            android:fontFamily="@font/poppins_bold"
-            android:textColor="@color/grey"
-            android:textSize="20sp"
-            android:layout_marginHorizontal="6dp"/>
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:text="@string/header_feb"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginHorizontal="6dp"/>
 
             <TextView
                 android:id="@+id/text_month_mar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/header_mar"
-            android:fontFamily="@font/poppins_bold"
-            android:textColor="@color/grey"
-            android:textSize="20sp"
-            android:layout_marginHorizontal="6dp"/>
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:text="@string/header_mar"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginHorizontal="6dp"/>
         </LinearLayout>
 
         <View
@@ -286,7 +291,6 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_content"

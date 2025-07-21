@@ -7,11 +7,11 @@
     <!-- Home Page -->
     <string name="greeting_message">Hello, name!</string>
     <string name="quote">Great ideas start with small notes.</string>
-    <string name="today_date">12</string>
-    <string name="today_day">Thursday</string>
+    <string name="today_date">20</string>
+    <string name="today_day">Monday</string>
     <string name="today_month">JANUARY</string>
     <string name="today_s_line_title">Today\'s Line!</string>
-    <string name="today_s_line_spoiler">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="today_s_line_spoiler">Mulai minggu depan pikiran berat soal deadline</string>
     <string name="btn_write_now">Write Now</string>
 
     <string name="your_goals">Your Goals!</string>
