@@ -99,5 +99,30 @@
     <string name="_2026">2026</string>
     <string name="_2027">2027</string>
 
+    <!-- Strings used for activity_one_line -->
+    <string name="desc_close_button">Tutup</string>
+    <string name="hint_one_sentence">Write one sentence for today</string>
+    <string name="desc_attach_file">Attach File</string>
+    <string name="desc_emoji">Emoji</string>
+    <string name="desc_record_audio">Record Audio</string>
+    <string name="desc_photo">Photo placeholder</string>
+    <string name="desc_photo2">Photo placeholder 2</string>
+    <string name="one_sentence_title">one sentence for today</string>
+    <string name="sentence_count_format">%1$d/%2$d</string>
+    <string name="audio_time_format">%1$s %2$s</string>
+    <string name="audio_time2">03:00  07/12/24</string>
+    <string name="audio_q1">Audio Q1</string>
+    <string name="foto_dan_video">Foto dan Video</string>
+    <string name="title_what_happened_today">What happened today?</string>
+
+
+
+
+
+
+
+
+
+
 
 </resources>
