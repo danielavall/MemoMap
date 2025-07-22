@@ -1,51 +1,51 @@
 // app/src/main/java/com/example/memomap/GoalAdapter.java
 package com.example.memomap;
 
-import android.content.Context; // Penting: import Context
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout; // Import RelativeLayout
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder> {
 
-    private List<Goal> goalList; // Daftar goal yang sedang ditampilkan
-    private OnGoalStatusChangeListener listener; // Listener untuk perubahan status (checkbox)
-    private OnGoalDeleteListener deleteListener; // Listener baru untuk penghapusan
-    private Context context; // Context diperlukan untuk Toast dan mendapatkan Drawable
+    private List<Goal> goalList;
+    private OnGoalStatusChangeListener listener;
+    private OnGoalDeleteListener deleteListener;
+    private final Context context;
 
-    // Constructor yang menerima List<Goal> dan Context
     public GoalAdapter(List<Goal> goalList, Context context) {
         this.goalList = goalList;
         this.context = context;
+        setHasStableIds(true); // Penting untuk RecyclerView yang lebih stabil
     }
 
-    // Metode untuk memperbarui data di adapter (saat filter berubah)
+    @SuppressLint("NotifyDataSetChanged")
     public void updateList(List<Goal> newList) {
-        this.goalList.clear();
-        this.goalList.addAll(newList);
-        notifyDataSetChanged(); // Memberi tahu RecyclerView untuk me-refresh
+        this.goalList = new ArrayList<>(newList);
+        notifyDataSetChanged();
     }
 
-    // Setter untuk listener status perubahan goal
     public void setOnGoalStatusChangeListener(OnGoalStatusChangeListener listener) {
         this.listener = listener;
     }
 
-    // Setter untuk listener penghapusan goal
     public void setOnGoalDeleteListener(OnGoalDeleteListener deleteListener) {
         this.deleteListener = deleteListener;
     }
 
-    // Getter untuk Context, digunakan oleh SwipeToDeleteCallback
     public Context getItemViewContext() {
         return context;
     }
@@ -60,36 +60,41 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
     @Override
     public void onBindViewHolder(@NonNull GoalViewHolder holder, int position) {
         Goal currentGoal = goalList.get(position);
+        Log.d("DEBUG_APP", "onBindViewHolder: Binding position " + position + ", Goal: " + currentGoal.toString());
+
+        // --- PERBAIKAN PENTING UNTUK RESET TRANSLASI DI AWAL onBindViewHolder ---
+        // Ini memastikan ViewHolder yang didaur ulang kembali ke posisi awal
+        // dan visibilitas default sebelum data baru di-bind.
+        holder.itemView.setTranslationX(0); // Reset translasi seluruh item
+        holder.mainContentLayout.setTranslationX(0); // Reset translasi main_content_layout
+        holder.deleteButtonLayout.setVisibility(View.INVISIBLE); // Pastikan hidden by default
+        // --- AKHIR PERBAIKAN RESET ---
 
         holder.titleTextView.setText(currentGoal.getTitle());
         holder.labelTextView.setText(currentGoal.getLabel());
 
-        // Hapus listener sebelumnya sebelum mengatur yang baru untuk menghindari masalah daur ulang
+        // Reset checkbox listener dulu sebelum mengatur checked state
         holder.checkBox.setOnCheckedChangeListener(null);
         holder.checkBox.setChecked(currentGoal.isCompleted());
 
         // Atur listener baru untuk checkbox
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             currentGoal.setCompleted(isChecked);
-            // Beri tahu Fragment bahwa status goal telah berubah
             if (listener != null) {
                 listener.onGoalStatusChanged();
             }
         });
 
-        // Logika untuk mengubah latar belakang label berdasarkan jenis goal
+        // Ganti background label berdasarkan jenis goal
         String label = currentGoal.getLabel();
         if ("Task".equals(label)) {
-            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_task); // Pastikan drawable ini ada
+            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_task);
         } else if ("Goal".equals(label)) {
-            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_goal); // Pastikan drawable ini ada
+            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_goal);
         }
-        // Tambahkan else jika ada kondisi label lain yang perlu background berbeda
 
-        // Tangani klik pada tombol hapus (area merah) yang muncul setelah swipe
-        // Ini memastikan bahwa jika user mengklik area merah setelah swipe, item akan dihapus
+        // Tangani klik pada tombol delete (area merah)
         holder.deleteButtonLayout.setOnClickListener(v -> {
-            // Panggil metode deleteItem di adapter ini sendiri
             deleteItem(holder.getAdapterPosition());
         });
     }
@@ -99,16 +104,23 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
         return goalList.size();
     }
 
-    // Metode untuk menghapus item dari daftar goalList
+    // --- PENTING: Override getItemId untuk Stable IDs ---
+    @Override
+    public long getItemId(int position) {
+        // Menggunakan ID unik dari objek Goal Anda (Goal.java harus memiliki getId())
+        return goalList.get(position).getId();
+    }
+    // --- AKHIR getItemId ---
+
     public void deleteItem(int position) {
         if (position >= 0 && position < goalList.size()) {
-            Goal deletedGoal = goalList.get(position); // Dapatkan objek Goal yang akan dihapus
-            goalList.remove(position); // Hapus dari daftar yang sedang ditampilkan adapter
-            notifyItemRemoved(position); // Beri tahu RecyclerView bahwa item dihapus
+            Goal deletedGoal = goalList.get(position);
+            goalList.remove(position);
+            notifyItemRemoved(position); // Memberi tahu RecyclerView untuk menghapus item
 
-            // Beri tahu Fragment bahwa item telah dihapus, kirim objek Goal yang dihapus
+            // Beri tahu Fragment bahwa item telah dihapus
             if (deleteListener != null) {
-                deleteListener.onGoalDeleted(deletedGoal); // Penting: kirim objek Goal
+                deleteListener.onGoalDeleted(deletedGoal);
             }
             Toast.makeText(context, "Goal '" + deletedGoal.getTitle() + "' deleted.", Toast.LENGTH_SHORT).show();
         }
@@ -118,121 +130,26 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
         TextView titleTextView;
         TextView labelTextView;
         CheckBox checkBox;
-        RelativeLayout deleteButtonLayout; // Layout untuk tombol hapus
+        RelativeLayout deleteButtonLayout;
+        LinearLayout mainContentLayout; // Deklarasi
 
         public GoalViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.title_text);
             labelTextView = itemView.findViewById(R.id.label_text);
             checkBox = itemView.findViewById(R.id.checkbox);
-            deleteButtonLayout = itemView.findViewById(R.id.delete_button_layout); // Inisialisasi
+            deleteButtonLayout = itemView.findViewById(R.id.delete_button_layout);
+            // --- PERBAIKAN PENTING DI SINI: GUNAKAN ID YANG BENAR ---
+            mainContentLayout = itemView.findViewById(R.id.main_content_layout); // <-- INI YANG BENAR
+            // --- AKHIR PERBAIKAN ---
         }
     }
 
-    // Interface untuk komunikasi dari Adapter ke Fragment (perubahan status goal)
     public interface OnGoalStatusChangeListener {
         void onGoalStatusChanged();
     }
 
-    // Interface baru untuk komunikasi dari Adapter ke Fragment (penghapusan goal)
     public interface OnGoalDeleteListener {
-        void onGoalDeleted(Goal deletedGoal); // Mengirim objek Goal yang dihapus
+        void onGoalDeleted(Goal deletedGoal);
     }
 }
-
-
-//// app/src/main/java/com/example/memomap/GoalAdapter.java
-//package com.example.memomap;
-//
-//import android.view.LayoutInflater;
-//import android.view.View;
-//import android.view.ViewGroup;
-//import android.widget.CheckBox;
-//import android.widget.TextView;
-//
-//import androidx.annotation.NonNull;
-//import androidx.recyclerview.widget.RecyclerView;
-//
-//import java.util.List;
-//
-//public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder> {
-//
-//    private List<Goal> goalList;
-//    private OnGoalStatusChangeListener listener; // Listener untuk komunikasi ke Fragment
-//
-//    public GoalAdapter(List<Goal> goalList) {
-//        this.goalList = goalList;
-//    }
-//
-//    // Metode untuk memperbarui data di adapter
-//    public void updateList(List<Goal> newList) {
-//        this.goalList.clear();
-//        this.goalList.addAll(newList);
-//        notifyDataSetChanged(); // Memberi tahu RecyclerView untuk me-refresh
-//    }
-//
-//    // Setter untuk listener
-//    public void setOnGoalStatusChangeListener(OnGoalStatusChangeListener listener) {
-//        this.listener = listener;
-//    }
-//
-//    @NonNull
-//    @Override
-//    public GoalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_goals, parent, false);
-//        return new GoalViewHolder(view);
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull GoalViewHolder holder, int position) {
-//        Goal currentGoal = goalList.get(position);
-//
-//        holder.titleTextView.setText(currentGoal.getTitle());
-//        holder.labelTextView.setText(currentGoal.getLabel());
-//
-//        // Hapus listener sebelumnya sebelum mengatur yang baru untuk menghindari masalah daur ulang
-//        holder.checkBox.setOnCheckedChangeListener(null);
-//        holder.checkBox.setChecked(currentGoal.isCompleted());
-//
-//        // Atur listener baru
-//        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            currentGoal.setCompleted(isChecked);
-//            // Beri tahu Fragment bahwa status goal telah berubah
-//            if (listener != null) {
-//                listener.onGoalStatusChanged();
-//            }
-//        });
-//
-//        // Logika untuk mengubah latar belakang label
-//        String label = currentGoal.getLabel();
-//        if ("Task".equals(label)) {
-//            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_task);
-//        } else if ("Goal".equals(label)) {
-//            holder.labelTextView.setBackgroundResource(R.drawable.bg_label_goal);
-//        }
-//        // Tambahkan else jika ada kondisi label lain yang perlu background berbeda
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return goalList.size();
-//    }
-//
-//    public static class GoalViewHolder extends RecyclerView.ViewHolder {
-//        TextView titleTextView;
-//        TextView labelTextView;
-//        CheckBox checkBox;
-//
-//        public GoalViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            titleTextView = itemView.findViewById(R.id.title_text);
-//            labelTextView = itemView.findViewById(R.id.label_text);
-//            checkBox = itemView.findViewById(R.id.checkbox);
-//        }
-//    }
-//
-//    // Interface untuk komunikasi dari Adapter ke Fragment
-//    public interface OnGoalStatusChangeListener {
-//        void onGoalStatusChanged();
-//    }
-//}

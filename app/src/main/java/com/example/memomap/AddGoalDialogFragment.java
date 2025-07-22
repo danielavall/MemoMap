@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 // import android.os.Handler; // TIDAK PERLU lagi
 // import android.os.Looper; // TIDAK PERLU lagi
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,20 @@ public class AddGoalDialogFragment extends DialogFragment {
         radioGroupType = view.findViewById(R.id.radio_group_type);
         sendGoalButton = view.findViewById(R.id.send_goal_button);
 
+
+        String preSelectLabel = null;
+        if (getArguments() != null) {
+            preSelectLabel = getArguments().getString("PRE_SELECT_LABEL");
+        }
+        Log.d("DEBUG_APP", "AddGoalDialogFragment: preSelectLabel yang diterima: " + preSelectLabel); // Tambahkan ini
+
+        if ("Goal".equals(preSelectLabel)) {
+            radioGroupType.check(R.id.radio_goal);
+        } else if ("Task".equals(preSelectLabel)) {
+            radioGroupType.check(R.id.radio_task);
+        } else {
+            radioGroupType.check(R.id.radio_task);
+        }
         // --- Perubahan di SINI ---
         // Hapus atau komentari baris yang memberikan fokus dan menampilkan keyboard otomatis:
         // inputGoal.requestFocus(); // Hapus baris ini
