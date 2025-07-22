@@ -5,13 +5,13 @@
     <string name="content">Content</string>
 
     <!-- Home Page -->
-    <string name="greeting_message">Hello, name!</string>
+    <string name="greeting_message">Hello, Dontol Adit!</string>
     <string name="quote">Great ideas start with small notes.</string>
-    <string name="today_date">12</string>
-    <string name="today_day">Thursday</string>
+    <string name="today_date">20</string>
+    <string name="today_day">Monday</string>
     <string name="today_month">JANUARY</string>
     <string name="today_s_line_title">Today\'s Line!</string>
-    <string name="today_s_line_spoiler">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="today_s_line_spoiler">Mulai minggu depan pikiran berat soal deadline</string>
     <string name="btn_write_now">Write Now</string>
 
     <string name="your_goals">Your Goals!</string>
@@ -39,6 +39,7 @@
     <string name="video_count">%1$d video</string>
     <string name="video_count_plural">%1$d videos</string>
     <string name="btn_calendar">btn_calendar</string>
+    <string name="task">Task</string>
 
     <plurals name="photo_count_plural">
         <item quantity="one">%d photo</item>
@@ -98,10 +99,15 @@
     <string name="_2025">2025</string>
     <string name="_2026">2026</string>
     <string name="_2027">2027</string>
+    <string name="goal">Goal</string>
+    <string name="all">All</string>
+    <string name="tasks">Tasks</string>
+    <string name="goals">Goals</string>
+    <string name="done">Done</string>
 
     <!-- Strings used for activity_one_line -->
-    <string name="desc_close_button">Tutup</string>
-    <string name="hint_one_sentence">Write one sentence for today</string>
+    <string name="desc_close_button">Closed</string>
+    <string name="hint_one_sentence">one sentence for today</string>
     <string name="desc_attach_file">Attach File</string>
     <string name="desc_emoji">Emoji</string>
     <string name="desc_record_audio">Record Audio</string>
@@ -113,8 +119,8 @@
     <string name="audio_time2">03:00  07/12/24</string>
     <string name="audio_q1">Audio Q1</string>
     <string name="foto_dan_video">Foto dan Video</string>
-    <string name="title_what_happened_today">What happened today?</string>
-
+    <string name="tv_question_text">What happened today?</string>
+    <string name="save_button_text">Save</string>
 
 
 

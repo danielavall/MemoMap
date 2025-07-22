@@ -73,9 +73,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Tahun sebelumnya -->
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_year_prev_2"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/_2023"
                 android:fontFamily="@font/poppins_bold"
@@ -84,7 +84,8 @@
                 android:layout_marginHorizontal="6dp"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_year_prev_1"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/_2024"
                 android:fontFamily="@font/poppins_bold"
@@ -92,7 +93,6 @@
                 android:textSize="18sp"
                 android:layout_marginHorizontal="6dp"/>
 
-            <!-- Panah kiri -->
             <ImageButton
                 android:id="@+id/btn_previous"
                 android:layout_width="48dp"
@@ -101,16 +101,15 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/btn_previous" />
 
-            <!-- Tahun aktif -->
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_current_year"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/_2025"
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <!-- Panah kanan -->
             <ImageButton
                 android:id="@+id/btn_next"
                 android:layout_width="48dp"
@@ -119,9 +118,9 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/btn_next" />
 
-            <!-- Tahun setelahnya -->
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_year_next_1"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/_2026"
                 android:fontFamily="@font/poppins_bold"
@@ -130,7 +129,8 @@
                 android:layout_marginHorizontal="6dp"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_year_next_2"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/_2027"
                 android:fontFamily="@font/poppins_bold"

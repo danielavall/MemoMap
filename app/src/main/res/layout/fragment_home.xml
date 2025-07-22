@@ -210,26 +210,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Bulan sebelumnya -->
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_month_nov"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/header_nov"
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="18sp"
+                android:gravity="center"
                 android:layout_marginHorizontal="6dp"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_month_dec"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/header_dec"
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="18sp"
+                android:gravity="center"
                 android:layout_marginHorizontal="6dp"/>
 
-            <!-- Panah kiri -->
             <ImageButton
                 android:id="@+id/btn_previous"
                 android:layout_width="48dp"
@@ -238,16 +240,16 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/btn_previous" />
 
-            <!-- Bulan aktif -->
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_month_current"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/header_jan"
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="18sp"
+                android:gravity="center" />
 
-            <!-- Panah kanan -->
             <ImageButton
                 android:id="@+id/btn_next"
                 android:layout_width="48dp"
@@ -256,23 +258,26 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/btn_next" />
 
-            <!-- Bulan setelahnya -->
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_month_feb"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/header_feb"
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/grey"
-                android:textSize="20sp"
+                android:textSize="18sp"
+                android:gravity="center"
                 android:layout_marginHorizontal="6dp"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_month_mar"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:text="@string/header_mar"
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/grey"
-                android:textSize="20sp"
+                android:textSize="18sp"
+                android:gravity="center"
                 android:layout_marginHorizontal="6dp"/>
         </LinearLayout>
 
@@ -286,7 +291,6 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_content"

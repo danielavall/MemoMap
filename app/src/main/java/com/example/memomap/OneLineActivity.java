@@ -7,10 +7,11 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.PopupWindow;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,9 +21,11 @@ import java.util.Locale;
 
 public class OneLineActivity extends AppCompatActivity {
 
-    private TextView tvTime;
     private EditText etDailyNote;
     private TextView tvCharCount;
+    private ImageView ivMic; // Mikrofon button
+    private ImageView ivAttach; // attach button
+    private ImageView ivEmoji; // attach button
     private Button btnSave;
     private LinearLayout mediaContainer;
 
@@ -31,17 +34,51 @@ public class OneLineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_one_line);
 
-        // Initialize views
-        tvTime = findViewById(R.id.tvTime);
+        ivMic = findViewById(R.id.ivMic); // Inisialisasi dengan ID yang sesuai di XML
+
+        ivMic.setOnClickListener(v -> {
+            // Menampilkan Bottom Sheet ketika tombol mikrofon diklik
+            BottomSheetRecordFragment bottomSheet = new BottomSheetRecordFragment();
+            bottomSheet.show(getSupportFragmentManager(), "BottomSheetRecordFragment");
+        });
+
+        ivAttach = findViewById(R.id.ivAttach); // Temukan ImageView mikrofon
+
+        ivAttach.setOnClickListener(v -> {
+            // Menampilkan Bottom Sheet ketika tombol mikrofon diklik
+            BottomSheetOptionsFragment bottomSheet = new BottomSheetOptionsFragment();
+            bottomSheet.show(getSupportFragmentManager(), "BottomSheetOptionsFragment");
+        });
+
+        ivEmoji = findViewById(R.id.ivEmoji);
+
+        ivEmoji.setOnClickListener(v -> {
+            // Inflate layout pop-up emoji
+            View popupView = getLayoutInflater().inflate(R.layout.fragment_bottom_sheet_emoji, null);
+
+            // Buat PopupWindow
+            final PopupWindow popupWindow = new PopupWindow(popupView,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    true); // true: bisa ditutup otomatis saat klik di luar
+
+            // Handle klik pada masing-masing emoji
+            setEmojiClick(popupView, R.id.ivSad, R.drawable.ic_emote_sad_green, popupWindow, ivEmoji);
+            setEmojiClick(popupView, R.id.ivCry, R.drawable.ic_emote_cry_blue, popupWindow, ivEmoji);
+            setEmojiClick(popupView, R.id.ivNeutral, R.drawable.ic_emote_neutral_orange, popupWindow, ivEmoji);
+            setEmojiClick(popupView, R.id.ivHappy, R.drawable.ic_emote_happy_purple, popupWindow, ivEmoji);
+            setEmojiClick(popupView, R.id.ivSmile, R.drawable.ic_emote_smile_pink, popupWindow, ivEmoji);
+
+            // Tampilkan pop-up di atas tombol
+            popupWindow.showAsDropDown(ivEmoji, 0, -ivEmoji.getHeight() * 3); // Y offset agar naik ke atas
+        });
+
+
+        //Inisialisasi semua view yang digunakan
         etDailyNote = findViewById(R.id.etDailyNote);
         tvCharCount = findViewById(R.id.tvCharCount);
         btnSave = findViewById(R.id.btnSave);
         mediaContainer = findViewById(R.id.mediaContainer);
-        ImageButton btnBack = findViewById(R.id.btnBack);
-
-        // Set current time
-        String currentTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-        tvTime.setText(currentTime);
 
         // Character counter
         etDailyNote.addTextChangedListener(new TextWatcher() {
@@ -60,20 +97,32 @@ public class OneLineActivity extends AppCompatActivity {
         // Save button click
         btnSave.setOnClickListener(v -> saveEntry());
 
-        // Back button
-        btnBack.setOnClickListener(v -> {
+        // Initialize media items (photos/audio)
+        setupMediaItems();
+
+        // Close button
+        ImageView btnClose = findViewById(R.id.btnClose);
+        btnClose.setOnClickListener(v -> {
             Intent intent = new Intent(OneLineActivity.this, MainActivity.class);
+            intent.putExtra("go_home", true);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
         });
 
-        // Initialize media items (photos/audio)
-        setupMediaItems();
     }
+
+    private void setEmojiClick(View popupView, int emojiId, int emojiDrawable, PopupWindow popupWindow, ImageView ivEmoji) {
+        ImageView emojiView = popupView.findViewById(emojiId);
+        emojiView.setOnClickListener(v -> {
+            ivEmoji.setImageResource(emojiDrawable);
+            popupWindow.dismiss();
+        });
+    }
+
 
     private void saveEntry() {
         String note = etDailyNote.getText().toString();
-        String time = tvTime.getText().toString();
 
         // TODO: Save to database or SharedPreferences
         // Example:
@@ -116,17 +165,4 @@ public class OneLineActivity extends AppCompatActivity {
             // Handle selected media
         }
     }
-
-    etDailyNote.addTextChangedListener(new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            tvCharCounter.setText(s.length() + "/36");
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {}
-    });
 }
