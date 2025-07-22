@@ -69,6 +69,7 @@
 
     <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:gravity">center</item>
     </style>
 
 
