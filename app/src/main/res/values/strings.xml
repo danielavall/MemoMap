@@ -104,6 +104,11 @@
     <string name="tasks">Tasks</string>
     <string name="goals">Goals</string>
     <string name="done">Done</string>
+    <string name="empty_all_goals_message">You haven\'t created a Task or Goals</string>
+    <string name="empty_tasks_message">You haven\'t created a Task</string>
+    <string name="empty_goals_message">You haven\'t created a Goals</string>
+    <string name="empty_done_message">No Goals or Tasks Completed</string>
+    <string name="delete_button">Delete Button</string>
 
     <!-- Strings used for activity_one_line -->
     <string name="desc_close_button">Closed</string>

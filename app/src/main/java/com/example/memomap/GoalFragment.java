@@ -1,47 +1,50 @@
+// app/src/main/java/com/example/memomap/GoalFragment.java
 package com.example.memomap;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.button.MaterialButton; // Import ini jika kamu menggunakan MaterialButtonToggleGroup
-import com.google.android.material.button.MaterialButtonToggleGroup; // Import ini jika kamu menggunakan MaterialButtonToggleGroup
 
 import java.util.ArrayList;
-import java.util.Collections; // Untuk sorting
-import java.util.Comparator; // Untuk sorting
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
-// import java.util.stream.Collectors; // Tidak digunakan dalam implementasi ini
 
-// Pastikan GoalFragment mengimplementasikan kedua interface
-public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddGoalDialogListener, GoalAdapter.OnGoalStatusChangeListener {
+public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddGoalDialogListener,
+        GoalAdapter.OnGoalStatusChangeListener, GoalAdapter.OnGoalDeleteListener {
 
     private RecyclerView goalRecyclerView;
     private GoalAdapter goalAdapter;
-    private List<Goal> allGoals; // Daftar lengkap semua goal
+    private List<Goal> allGoals; // Ini adalah sumber data utama kita
     private FloatingActionButton addGoalsButton;
-    // Jika kamu kembali ke TabLayout (bukan MaterialButtonToggleGroup), gunakan ini:
     private TabLayout tabLayout;
-    // Jika kamu menggunakan MaterialButtonToggleGroup (seperti diskusi sebelumnya untuk tampilan pil), gunakan ini:
-    private MaterialButtonToggleGroup toggleButtonGroup;
 
-    private String currentFilter = "All"; // Filter aktif saat ini, default "All"
+    private TextView emptyAllGoalsText;
+    private TextView emptyTasksText;
+    private TextView emptyGoalsText;
+    private TextView emptyDoneText;
+
+    private String currentFilter = "All";
 
     public GoalFragment() {
         // Required empty public constructor
     }
 
-    // Metode newInstance, param1, param2 (disertakan untuk kelengkapan, tidak esensial untuk fitur ini)
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -63,14 +66,13 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        // Inisialisasi data dummy Anda hanya sekali di onCreate
         allGoals = new ArrayList<>();
         allGoals.add(new Goal("Belajar Android Jetpack Compose", "Task", false));
-        allGoals.add(new Goal("Lari Pagi 30 Menit", "Task", true)); // Contoh Task Selesai
+        allGoals.add(new Goal("Lari Pagi 30 Menit", "Task", true));
         allGoals.add(new Goal("Baca Buku 'Atomic Habits'", "Goal", false));
         allGoals.add(new Goal("Selesaikan Laporan Bulanan", "Goal", false));
         allGoals.add(new Goal("Telepon Orang Tua", "Task", false));
-        allGoals.add(new Goal("Menyiram Tanaman", "Goal", true)); // Contoh Goal Selesai
+        allGoals.add(new Goal("Menyiram Tanaman", "Goal", true));
     }
 
     @Override
@@ -81,147 +83,281 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
         goalRecyclerView = view.findViewById(R.id.goal_recycler_view);
         goalRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        goalAdapter = new GoalAdapter(new ArrayList<>());
+        // Inisialisasi GoalAdapter dengan Context dari Fragment
+        goalAdapter = new GoalAdapter(new ArrayList<>(), getContext());
         goalRecyclerView.setAdapter(goalAdapter);
-        goalAdapter.setOnGoalStatusChangeListener(this); // Set listener untuk update status goal
+        goalAdapter.setOnGoalStatusChangeListener(this);
+        goalAdapter.setOnGoalDeleteListener(this); // Set delete listener ke fragment ini
+
+        // Inisialisasi SwipeToDeleteCallback dan attach ke RecyclerView
+        // Pastikan R.drawable.ic_delete_white ada di folder drawable Anda
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(goalAdapter, R.drawable.icon_trash));
+        itemTouchHelper.attachToRecyclerView(goalRecyclerView);
 
         addGoalsButton = view.findViewById(R.id.addGoalsButton);
         addGoalsButton.setOnClickListener(v -> {
+            Log.d("DEBUG_APP", "GoalFragment: currentFilter saat klik tombol tambah: " + currentFilter); // Tambahkan ini
             AddGoalDialogFragment addGoalDialog = new AddGoalDialogFragment();
+            Bundle args = new Bundle();
+            String preSelectLabel = "Task"; // Default
+
+            if ("Goals".equals(currentFilter)) {
+                preSelectLabel = "Goal";
+            } else if ("Tasks".equals(currentFilter)) {
+                preSelectLabel = "Task";
+            } else {
+                preSelectLabel = "Task";
+            }
+
+            args.putString("PRE_SELECT_LABEL", preSelectLabel);
+            addGoalDialog.setArguments(args);
             addGoalDialog.setAddGoalDialogListener(this);
             addGoalDialog.show(getParentFragmentManager(), "AddGoalDialogTag");
         });
 
-        // --- Perubahan untuk Tab Control ---
-        // Kamu bisa menggunakan TabLayout (sesuai kode ini) ATAU MaterialButtonToggleGroup
-        // Pastikan ID di sini sesuai dengan yang di fragment_goal.xml
+        emptyAllGoalsText = view.findViewById(R.id.empty_all_goals_text);
+        emptyTasksText = view.findViewById(R.id.empty_tasks_text);
+        emptyGoalsText = view.findViewById(R.id.empty_goals_text);
+        emptyDoneText = view.findViewById(R.id.empty_done_text);
 
-        // Jika menggunakan TabLayout:
         tabLayout = view.findViewById(R.id.tab_layout);
-        // Tambahkan tab secara programatis jika belum di XML
-        if (tabLayout.getTabCount() == 0) { // Hanya tambahkan jika belum ada
-            tabLayout.addTab(tabLayout.newTab().setText("All"));
-            tabLayout.addTab(tabLayout.newTab().setText("Tasks"));
-            tabLayout.addTab(tabLayout.newTab().setText("Goals"));
-            tabLayout.addTab(tabLayout.newTab().setText("Done"));
-        }
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                updateTabAppearance(tab, true); // Hanya jika menggunakan custom background di Java
+                updateTabAppearance(tab, true);
                 currentFilter = tab.getText().toString();
-                filterGoals(currentFilter); // Panggil langsung, tidak perlu post()
+                if (goalRecyclerView != null) {
+                    goalRecyclerView.post(() -> {
+                        filterGoals(currentFilter);
+                        showEmptyMessage();
+                    });
+                }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                updateTabAppearance(tab, false); // Hanya jika menggunakan custom background di Java
+                updateTabAppearance(tab, false);
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                // Tidak perlu melakukan apa-apa jika tab yang sama diklik lagi
+                // Not needed
             }
         });
 
-        // Pilih tab "All" secara default dan filter data
-        // Menggunakan post() di sini adalah cara yang baik untuk memastikan tabLayout sudah diukur
         tabLayout.post(() -> {
-            TabLayout.Tab firstTab = tabLayout.getTabAt(0); // Dapatkan tab "All" (indeks 0)
+            TabLayout.Tab firstTab = tabLayout.getTabAt(0);
             if (firstTab != null) {
-                firstTab.select(); // Pilih tab "All" secara programatis
-                updateTabAppearance(firstTab, true); // Hanya jika menggunakan custom background di Java
+                firstTab.select();
+                updateTabAppearance(firstTab, true);
                 currentFilter = firstTab.getText().toString();
-                filterGoals(currentFilter); // Panggil langsung
+                if (goalRecyclerView != null) {
+                    goalRecyclerView.post(() -> {
+                        filterGoals(currentFilter);
+                        showEmptyMessage();
+                    });
+                }
             }
         });
-        // --- Akhir Perubahan untuk Tab Control ---
 
         return view;
     }
 
-    // Metode updateTabAppearance() kamu (jika masih diperlukan untuk custom background)
-    // Jika kamu menggunakan MaterialButtonToggleGroup dengan styling di XML, metode ini mungkin tidak perlu.
     private void updateTabAppearance(TabLayout.Tab tab, boolean isSelected) {
         View tabView = tab.view;
         if (tabView != null) {
             if (isSelected) {
-                tabView.setBackgroundResource(R.drawable.rounded_active_blue); // Pastikan ini ada
+                tabView.setBackgroundResource(R.drawable.rounded_active_blue); // Pastikan drawable ini ada
             } else {
-                tabView.setBackgroundResource(R.drawable.rounded_transparent_background); // Pastikan ini ada
+                tabView.setBackgroundResource(R.drawable.rounded_transparent_background); // Pastikan drawable ini ada
             }
-            // Kamu juga mungkin perlu mengatur warna teks secara manual di sini
-            // ((TextView) tabView.findViewById(android.R.id.text1)).setTextColor(ContextCompat.getColor(getContext(), isSelected ? R.color.blue : R.color.black_light));
         }
     }
 
-
-    // Memfilter daftar goals berdasarkan filter yang dipilih
     private void filterGoals(String filter) {
         List<Goal> filteredList = new ArrayList<>();
 
         switch (filter) {
             case "All":
                 filteredList.addAll(allGoals);
-                // Urutkan: yang belum selesai di atas, yang sudah selesai di bawah
-                Collections.sort(filteredList, Comparator.comparing(Goal::isCompleted));
+                Collections.sort(filteredList, (g1, g2) -> {
+                    int completedComparison = Boolean.compare(g1.isCompleted(), g2.isCompleted());
+                    if (completedComparison != 0) {
+                        return completedComparison;
+                    }
+                    return Long.compare(g1.getLastCompletionTimestamp(), g2.getLastCompletionTimestamp());
+                });
                 break;
             case "Tasks":
-                // Tampilkan SEMUA Task (selesai atau belum), lalu urutkan yang belum selesai di atas
                 for (Goal goal : allGoals) {
-                    if ("Task".equals(goal.getLabel())) { // <-- HAPUS && !goal.isCompleted()
+                    if ("Task".equals(goal.getLabel())) {
                         filteredList.add(goal);
                     }
                 }
-                Collections.sort(filteredList, Comparator.comparing(Goal::isCompleted)); // <-- Tambahkan pengurutan
+                Collections.sort(filteredList, (g1, g2) -> {
+                    int completedComparison = Boolean.compare(g1.isCompleted(), g2.isCompleted());
+                    if (completedComparison != 0) {
+                        return completedComparison;
+                    }
+                    return Long.compare(g1.getLastCompletionTimestamp(), g2.getLastCompletionTimestamp());
+                });
                 break;
             case "Goals":
-                // Tampilkan SEMUA Goal (selesai atau belum), lalu urutkan yang belum selesai di atas
                 for (Goal goal : allGoals) {
-                    if ("Goal".equals(goal.getLabel())) { // <-- HAPUS && !goal.isCompleted()
+                    if ("Goal".equals(goal.getLabel())) {
                         filteredList.add(goal);
                     }
                 }
-                Collections.sort(filteredList, Comparator.comparing(Goal::isCompleted)); // <-- Tambahkan pengurutan
+                Collections.sort(filteredList, (g1, g2) -> {
+                    int completedComparison = Boolean.compare(g1.isCompleted(), g2.isCompleted());
+                    if (completedComparison != 0) {
+                        return completedComparison;
+                    }
+                    return Long.compare(g1.getLastCompletionTimestamp(), g2.getLastCompletionTimestamp());
+                });
                 break;
             case "Done":
-                // Tampilkan semua Task dan Goal yang sudah selesai
                 for (Goal goal : allGoals) {
                     if (goal.isCompleted()) {
                         filteredList.add(goal);
                     }
                 }
-                // (Opsional) Anda bisa menambahkan pengurutan di sini untuk tab "Done"
-                // Misalnya, yang terakhir diselesaikan muncul di bagian atas di tab "Done"
-                // Collections.sort(filteredList, (g1, g2) -> Boolean.compare(g2.isCompleted(), g1.isCompleted()));
+                Collections.sort(filteredList, (g1, g2) -> Long.compare(g2.getLastCompletionTimestamp(), g1.getLastCompletionTimestamp()));
                 break;
         }
-        goalAdapter.updateList(filteredList); // Perbarui data di adapter
+        goalAdapter.updateList(filteredList);
+    }
+
+    private void showEmptyMessage() {
+        emptyAllGoalsText.setVisibility(View.GONE);
+        emptyTasksText.setVisibility(View.GONE);
+        emptyGoalsText.setVisibility(View.GONE);
+        emptyDoneText.setVisibility(View.GONE);
+        goalRecyclerView.setVisibility(View.VISIBLE);
+
+        if (goalAdapter.getItemCount() == 0) {
+            goalRecyclerView.setVisibility(View.GONE);
+            switch (currentFilter) {
+                case "All":
+                    emptyAllGoalsText.setVisibility(View.VISIBLE);
+                    break;
+                case "Tasks":
+                    emptyTasksText.setVisibility(View.VISIBLE);
+                    break;
+                case "Goals":
+                    emptyGoalsText.setVisibility(View.VISIBLE);
+                    break;
+                case "Done":
+                    emptyDoneText.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+    }
+
+    private List<Goal> filterGoalsToList(String filter) {
+        List<Goal> filteredList = new ArrayList<>();
+
+        for (Goal goal : allGoals) {
+            boolean match = false;
+            switch (filter) {
+                case "All":
+                    match = true;
+                    break;
+                case "Tasks":
+                    match = "Task".equals(goal.getLabel());
+                    break;
+                case "Goals":
+                    match = "Goal".equals(goal.getLabel());
+                    break;
+                case "Done":
+                    match = goal.isCompleted();
+                    break;
+                default:
+                    match = false;
+            }
+            if (match) filteredList.add(goal);
+        }
+
+        // Sorting sesuai filter
+        if ("Done".equals(filter)) {
+            filteredList.sort((g1, g2) -> Long.compare(g2.getLastCompletionTimestamp(), g1.getLastCompletionTimestamp()));
+        } else {
+            filteredList.sort((g1, g2) -> {
+                int completedComparison = Boolean.compare(g1.isCompleted(), g2.isCompleted());
+                if (completedComparison != 0) return completedComparison;
+                return Long.compare(g1.getLastCompletionTimestamp(), g2.getLastCompletionTimestamp());
+            });
+        }
+
+        return filteredList;
     }
 
 
-    // Implementasi dari AddGoalDialogListener (saat goal baru ditambahkan)
     @Override
     public void onGoalAdded(String goalText, String type) {
         Toast.makeText(getContext(), "Successfully Create New " + type + " : " + goalText, Toast.LENGTH_LONG).show();
         Goal newGoal = new Goal(goalText, type, false);
+        allGoals.add(0, newGoal);
 
-        // --- PERUBAHAN DI SINI: Tambahkan ke indeks 0 (awal daftar) ---
-        allGoals.add(0, newGoal); // Tambahkan goal baru ke daftar lengkap di posisi paling atas
+        // Cek apakah goal ini cocok dengan filter sekarang
+        boolean isMatch = false;
+        switch (currentFilter) {
+            case "All":
+                isMatch = true;
+                break;
+            case "Tasks":
+                isMatch = "Task".equals(type);
+                break;
+            case "Goals":
+                isMatch = "Goal".equals(type);
+                break;
+            case "Done":
+                isMatch = false;
+                break;
+        }
 
-        filterGoals(currentFilter); // Panggil langsung filterGoals untuk memperbarui RecyclerView
-        // Opsional: Gulir ke bagian atas setelah menambahkan jika tab yang aktif adalah "All" atau "Tasks/Goals" (dan item baru muncul di atas)
-        if ("All".equals(currentFilter) || "Tasks".equals(currentFilter) || "Goals".equals(currentFilter)) {
-            goalRecyclerView.scrollToPosition(0);
+        if (isMatch) {
+            goalAdapter.updateList(filterGoalsToList(currentFilter));
+        }
+
+        showEmptyMessage();
+    }
+
+
+    @Override
+    public void onGoalStatusChanged() {
+        if (goalRecyclerView != null) {
+            goalRecyclerView.post(() -> {
+                filterGoals(currentFilter);
+                showEmptyMessage();
+            });
         }
     }
 
-    // Implementasi dari GoalAdapter.OnGoalStatusChangeListener (saat status checkbox berubah)
     @Override
-    public void onGoalStatusChanged() {
-        // Ketika status checkbox berubah, kita perlu memfilter ulang daftar
-        // untuk memastikan item berada di tab yang benar (misal: pindah dari "Tasks" ke "Done")
-        filterGoals(currentFilter); // Panggil langsung filterGoals
+    public void onGoalDeleted(Goal deletedGoal) {
+        // Hapus goal yang sesuai dari sumber data utama (allGoals)
+        Iterator<Goal> iterator = allGoals.iterator();
+        while (iterator.hasNext()) {
+            Goal goal = iterator.next();
+            // Penting: Pastikan objek Goal memiliki metode equals() dan hashCode() yang di-override
+            // dengan benar, atau bandingkan berdasarkan properti unik seperti judul.
+            if (goal.equals(deletedGoal)) {
+                iterator.remove();
+                break;
+            }
+        }
+
+        // Setelah goal dihapus dari allGoals, filter ulang untuk memperbarui tampilan
+        if (goalRecyclerView != null) {
+            goalRecyclerView.post(() -> {
+                filterGoals(currentFilter);
+                showEmptyMessage();
+            });
+        }
     }
 }
+
+
+

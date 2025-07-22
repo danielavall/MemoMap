@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="delete_button_area_width">60dp</dimen>
+    <dimen name="swipe_delete_button_padding">16dp</dimen>
+    <dimen name="swipe_delete_button_end_margin">20dp</dimen>
+    <dimen name="swipe_delete_button_start_margin">20dp</dimen>
+</resources>
