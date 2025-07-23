@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import android.widget.ImageView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View; // Import View
 
@@ -16,7 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton; //
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-
+    
     private BottomNavigationView bottomNavigationView;
     private BottomAppBar bottomAppBar; // Deklarasi BottomAppBar
     private FloatingActionButton fabJournal; // Deklarasi FloatingActionButton
@@ -36,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
         // Mengatur background null untuk bottomNavigationView (ini sudah ada di kode Anda)
         binding.bottomNavigationView.setBackground(null);
 
+        fabJournal.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, OneLineActivity.class);
+            startActivity(intent);
+        });
+
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
@@ -49,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+
+        boolean goHome = getIntent().getBooleanExtra("go_home", false);
+        if (goHome) {
+            replaceFragment(new HomeFragment());
+        } else {
+            replaceFragment(new HomeFragment()); // default
+        }
+
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -83,4 +98,6 @@ public class MainActivity extends AppCompatActivity {
             fabJournal.setVisibility(View.VISIBLE);
         }
     }
+
+
 }
