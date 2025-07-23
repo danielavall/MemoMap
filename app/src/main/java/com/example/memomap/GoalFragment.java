@@ -2,14 +2,14 @@ package com.example.memomap;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log; // Pastikan Log diimpor
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ImageView; // Pastikan ImageView diimpor
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +27,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import android.animation.ObjectAnimator; // Untuk animasi ProgressBar
+import android.animation.ValueAnimator; // <--- IMPOR BARU UNTUK ANIMASI TEKS
+
 public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddGoalDialogListener,
         GoalAdapter.OnGoalStatusChangeListener, GoalAdapter.OnGoalDeleteListener {
 
@@ -41,7 +44,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
     private TextView emptyGoalsText;
     private TextView emptyDoneText;
 
-    private TextView progressPercentageText; // ID di XML adalah progress_percentage_text
+    private TextView progressPercentageText;
     private ProgressBar goalsProgressBar;
     private ImageView iconKapalStart;
     private ImageView iconPulauEnd;
@@ -90,12 +93,10 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
         goalRecyclerView = view.findViewById(R.id.goal_recycler_view);
         goalRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // --- INISIALISASI VIEW UNTUK PROGRESS ---
-        progressPercentageText = view.findViewById(R.id.progress_percentage_text); // ID ini harus sama dengan XML
+        progressPercentageText = view.findViewById(R.id.progress_percentage_text);
         goalsProgressBar = view.findViewById(R.id.goals_progress_bar);
         iconKapalStart = view.findViewById(R.id.icon_kapal_start);
         iconPulauEnd = view.findViewById(R.id.icon_pulau_end);
-        // --- AKHIR INISIALISASI VIEW ---
 
         goalAdapter = new GoalAdapter(new ArrayList<>(), getContext());
         goalRecyclerView.setAdapter(goalAdapter);
@@ -141,7 +142,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
                     goalRecyclerView.post(() -> {
                         filterGoals(currentFilter);
                         showEmptyMessage();
-                        updateProgressUI(); // PANGGIL SAAT FILTER BERUBAH
+                        updateProgressUI();
                     });
                 }
             }
@@ -167,7 +168,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
                     goalRecyclerView.post(() -> {
                         filterGoals(currentFilter);
                         showEmptyMessage();
-                        updateProgressUI(); // PANGGIL SAAT INISIALISASI
+                        updateProgressUI();
                     });
                 }
             }
@@ -176,7 +177,6 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
         return view;
     }
 
-    // --- METODE UNTUK MENGHITUNG DAN MEMPERBARUI PROGRESS & PERGERAKAN KAPAL ---
     @SuppressLint("SetTextI18n")
     private void updateProgressUI() {
         int totalGoals = 0;
@@ -189,36 +189,62 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             }
         }
 
-        int progressPercentage;
+        final int progressPercentage;
         if (totalGoals > 0) {
             progressPercentage = (completedGoals * 100) / totalGoals;
         } else {
             progressPercentage = 0;
         }
 
-        progressPercentageText.setText(progressPercentage + "%");
-        goalsProgressBar.setProgress(progressPercentage);
+        // --- PERBAIKAN: Animasi Progress Bar ---
+        ObjectAnimator animator = ObjectAnimator.ofInt(goalsProgressBar, "progress", goalsProgressBar.getProgress(), progressPercentage);
+        animator.setDuration(750); // Durasi animasi (milidetik)
+        animator.start();
+        // --- AKHIR PERBAIKAN ANIMASI PROGRESS BAR ---
 
-        // --- LOGIKA PERGERAKAN KAPAL ---
+        // --- PERBAIKAN BARU: Animasi Teks Persentase ---
+        // Dapatkan nilai persentase yang saat ini ditampilkan di TextView
+        int currentDisplayedPercentage = 0;
+        String currentText = progressPercentageText.getText().toString();
+        if (currentText.endsWith("%") && currentText.length() > 1) {
+            try {
+                currentDisplayedPercentage = Integer.parseInt(currentText.substring(0, currentText.length() - 1));
+            } catch (NumberFormatException e) {
+                // Jika parsing gagal (misalnya, teks default "0%", atau error), set ke 0
+                currentDisplayedPercentage = 0;
+            }
+        }
+
+        ValueAnimator textAnimator = ValueAnimator.ofInt(currentDisplayedPercentage, progressPercentage);
+        textAnimator.setDuration(750); // Cocokkan durasi dengan progress bar dan kapal
+        textAnimator.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            progressPercentageText.setText(animatedValue + "%");
+        });
+        textAnimator.start();
+        // --- AKHIR PERBAIKAN ANIMASI TEKS PERSENTASE ---
+
+
         goalsProgressBar.post(() -> {
             int progressBarWidth = goalsProgressBar.getWidth();
             int shipIconWidth = iconKapalStart.getWidth();
 
             if (progressBarWidth > 0 && shipIconWidth > 0) {
                 float translationRange = progressBarWidth - shipIconWidth;
-                float currentTranslationX = (progressPercentage / 100f) * translationRange;
+                float targetTranslationX = (progressPercentage / 100f) * translationRange;
 
-                // Batasi agar kapal tidak melewati batas-batas ProgressBar
-                float translationXForShip = Math.max(0f, Math.min(currentTranslationX, translationRange));
+                final float translationXForShip = Math.max(0f, Math.min(targetTranslationX, translationRange));
 
-                iconKapalStart.setTranslationX(translationXForShip);
+                // --- PERBAIKAN: Animasi Pergerakan Kapal ---
+                iconKapalStart.animate()
+                        .translationX(translationXForShip)
+                        .setDuration(750) // Durasi animasi (milidetik)
+                        .start();
+                // --- AKHIR PERBAIKAN ANIMASI PERGERAKAN KAPAL ---
             }
         });
-        // --- AKHIR LOGIKA PERGERAKAN KAPAL ---
     }
-    // --- AKHIR METODE updateProgressUI ---
 
-    // --- DEFINISI METODE updateTabAppearance ---
     private void updateTabAppearance(TabLayout.Tab tab, boolean isSelected) {
         View tabView = tab.view;
         if (tabView != null) {
@@ -229,9 +255,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             }
         }
     }
-    // --- AKHIR DEFINISI updateTabAppearance ---
 
-    // --- DEFINISI METODE filterGoals ---
     private void filterGoals(String filter) {
         List<Goal> filteredList = new ArrayList<>();
 
@@ -285,9 +309,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
         }
         goalAdapter.updateList(filteredList);
     }
-    // --- AKHIR DEFINISI filterGoals ---
 
-    // --- DEFINISI METODE showEmptyMessage ---
     private void showEmptyMessage() {
         emptyAllGoalsText.setVisibility(View.GONE);
         emptyTasksText.setVisibility(View.GONE);
@@ -313,9 +335,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             }
         }
     }
-    // --- AKHIR DEFINISI showEmptyMessage ---
 
-    // --- DEFINISI METODE filterGoalsToList ---
     private List<Goal> filterGoalsToList(String filter) {
         List<Goal> filteredList = new ArrayList<>();
 
@@ -352,7 +372,6 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 
         return filteredList;
     }
-    // --- AKHIR DEFINISI filterGoalsToList ---
 
 
     @Override
@@ -382,7 +401,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
         }
 
         showEmptyMessage();
-        updateProgressUI(); // PANGGIL SAAT GOAL BARU DITAMBAHKAN
+        updateProgressUI();
     }
 
 
@@ -392,7 +411,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             goalRecyclerView.post(() -> {
                 filterGoals(currentFilter);
                 showEmptyMessage();
-                updateProgressUI(); // PANGGIL SAAT STATUS GOAL BERUBAH
+                updateProgressUI();
             });
         }
     }
@@ -412,12 +431,14 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             goalRecyclerView.post(() -> {
                 filterGoals(currentFilter);
                 showEmptyMessage();
-                updateProgressUI(); // PANGGIL SAAT GOAL DIHAPUS
+                updateProgressUI();
             });
         }
     }
 }
 
+
+//// app/src/main/java/com/example/memomap/GoalFragment.java
 //package com.example.memomap;
 //
 //import android.annotation.SuppressLint;
@@ -426,10 +447,10 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //import android.view.LayoutInflater;
 //import android.view.View;
 //import android.view.ViewGroup;
-//import android.widget.ProgressBar; // Import ProgressBar
+//import android.widget.ProgressBar;
 //import android.widget.TextView;
 //import android.widget.Toast;
-//import android.widget.ImageView; // Import ImageView jika belum
+//import android.widget.ImageView;
 //
 //import androidx.annotation.NonNull;
 //import androidx.annotation.Nullable;
@@ -447,6 +468,8 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //import java.util.Iterator;
 //import java.util.List;
 //
+//import android.animation.ObjectAnimator; // Pastikan ini diimpor jika belum
+//
 //public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddGoalDialogListener,
 //        GoalAdapter.OnGoalStatusChangeListener, GoalAdapter.OnGoalDeleteListener {
 //
@@ -461,12 +484,10 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //    private TextView emptyGoalsText;
 //    private TextView emptyDoneText;
 //
-//    // --- DEKLARASI VIEW BARU UNTUK PROGRESS ---
-//    private TextView progressTextView;
+//    private TextView progressPercentageText;
 //    private ProgressBar goalsProgressBar;
 //    private ImageView iconKapalStart;
 //    private ImageView iconPulauEnd;
-//    // --- AKHIR DEKLARASI VIEW BARU ---
 //
 //    private String currentFilter = "All";
 //
@@ -512,12 +533,10 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //        goalRecyclerView = view.findViewById(R.id.goal_recycler_view);
 //        goalRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //
-//        // --- INISIALISASI VIEW BARU ---
-//        progressTextView = view.findViewById(R.id.progress_text_view);
+//        progressPercentageText = view.findViewById(R.id.progress_percentage_text);
 //        goalsProgressBar = view.findViewById(R.id.goals_progress_bar);
 //        iconKapalStart = view.findViewById(R.id.icon_kapal_start);
 //        iconPulauEnd = view.findViewById(R.id.icon_pulau_end);
-//        // --- AKHIR INISIALISASI VIEW BARU ---
 //
 //        goalAdapter = new GoalAdapter(new ArrayList<>(), getContext());
 //        goalRecyclerView.setAdapter(goalAdapter);
@@ -563,7 +582,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //                    goalRecyclerView.post(() -> {
 //                        filterGoals(currentFilter);
 //                        showEmptyMessage();
-//                        updateProgressUI(); // <--- PANGGIL SAAT FILTER BERUBAH
+//                        updateProgressUI();
 //                    });
 //                }
 //            }
@@ -589,7 +608,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //                    goalRecyclerView.post(() -> {
 //                        filterGoals(currentFilter);
 //                        showEmptyMessage();
-//                        updateProgressUI(); // <--- PANGGIL SAAT INISIALISASI
+//                        updateProgressUI();
 //                    });
 //                }
 //            }
@@ -598,13 +617,11 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //        return view;
 //    }
 //
-//    // --- METODE BARU UNTUK MENGHITUNG DAN MEMPERBARUI PROGRESS ---
 //    @SuppressLint("SetTextI18n")
 //    private void updateProgressUI() {
 //        int totalGoals = 0;
 //        int completedGoals = 0;
 //
-//        // Gunakan allGoals karena progress dihitung dari semua goal
 //        for (Goal goal : allGoals) {
 //            totalGoals++;
 //            if (goal.isCompleted()) {
@@ -612,17 +629,42 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //            }
 //        }
 //
-//        // Hitung persentase
-//        int progressPercentage = 0;
+//        final int progressPercentage;
 //        if (totalGoals > 0) {
 //            progressPercentage = (completedGoals * 100) / totalGoals;
+//        } else {
+//            progressPercentage = 0;
 //        }
 //
-//        // Perbarui TextView dan ProgressBar
-//        progressTextView.setText(progressPercentage + "%");
-//        goalsProgressBar.setProgress(progressPercentage);
+//        progressPercentageText.setText(progressPercentage + "%");
+//
+//        // --- PERBAIKAN: Selalu gunakan ObjectAnimator untuk animasi progress bar ---
+//        // Ini akan memberikan animasi yang lebih konsisten di semua API level
+//        ObjectAnimator animator = ObjectAnimator.ofInt(goalsProgressBar, "progress", goalsProgressBar.getProgress(), progressPercentage);
+//        animator.setDuration(500); // Durasi animasi dalam milidetik. Coba tingkatkan ke 800 atau 1000 jika masih patah-patah
+//        animator.start();
+//        // --- AKHIR PERBAIKAN ANIMASI PROGRESS BAR ---
+//
+//
+//        goalsProgressBar.post(() -> {
+//            int progressBarWidth = goalsProgressBar.getWidth();
+//            int shipIconWidth = iconKapalStart.getWidth();
+//
+//            if (progressBarWidth > 0 && shipIconWidth > 0) {
+//                float translationRange = progressBarWidth - shipIconWidth;
+//                float targetTranslationX = (progressPercentage / 100f) * translationRange;
+//
+//                final float translationXForShip = Math.max(0f, Math.min(targetTranslationX, translationRange));
+//
+//                // --- PERBAIKAN: Animasi Pergerakan Kapal ---
+//                iconKapalStart.animate()
+//                        .translationX(translationXForShip)
+//                        .setDuration(500) // Durasi animasi (milidetik). Cocokkan dengan durasi progress bar.
+//                        .start();
+//                // --- AKHIR PERBAIKAN ANIMASI PERGERAKAN KAPAL ---
+//            }
+//        });
 //    }
-//    // --- AKHIR METODE BARU UNTUK PROGRESS ---
 //
 //    private void updateTabAppearance(TabLayout.Tab tab, boolean isSelected) {
 //        View tabView = tab.view;
@@ -780,7 +822,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //        }
 //
 //        showEmptyMessage();
-//        updateProgressUI(); // <--- PANGGIL SAAT GOAL BARU DITAMBAHKAN
+//        updateProgressUI();
 //    }
 //
 //
@@ -790,7 +832,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //            goalRecyclerView.post(() -> {
 //                filterGoals(currentFilter);
 //                showEmptyMessage();
-//                updateProgressUI(); // <--- PANGGIL SAAT STATUS GOAL BERUBAH
+//                updateProgressUI();
 //            });
 //        }
 //    }
@@ -810,9 +852,8 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 //            goalRecyclerView.post(() -> {
 //                filterGoals(currentFilter);
 //                showEmptyMessage();
-//                updateProgressUI(); // <--- PANGGIL SAAT GOAL DIHAPUS
+//                updateProgressUI();
 //            });
 //        }
 //    }
 //}
-//
