@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/ivSad"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_emote_happy_purple"
+        android:layout_marginEnd="8dp"/>
+
+    <ImageView
+        android:id="@+id/ivCry"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_emote_happy_purple"
+        android:layout_marginEnd="8dp"/>
+
+    <ImageView
+        android:id="@+id/ivNeutral"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_emote_happy_purple"
+        android:layout_marginEnd="8dp"/>
+
+    <ImageView
+        android:id="@+id/ivHappy"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_emote_happy_purple"
+        android:layout_marginEnd="8dp"/>
+
+    <ImageView
+        android:id="@+id/ivSmile"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_emote_happy_purple"/>
+</LinearLayout>
