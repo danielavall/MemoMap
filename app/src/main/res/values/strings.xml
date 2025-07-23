@@ -109,6 +109,9 @@
     <string name="empty_goals_message">You haven\'t created a Goals</string>
     <string name="empty_done_message">No Goals or Tasks Completed</string>
     <string name="delete_button">Delete Button</string>
+    <string name="icon_kapal">icon_kapal</string>
+    <string name="icon_pulau">icon_pulau</string>
+    <string name="percentage">0%</string>
 
 
 </resources>
