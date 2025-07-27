@@ -1,6 +1,10 @@
 package com.example.memomap;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,7 +48,8 @@ public class HomeFragment extends Fragment {
     private Calendar todayCalendar;
 
     // Tambahkan deklarasi untuk btn_profile
-    private ImageButton btnProfile;
+//    private ImageButton btnProfile;
+    private ShapeableImageView btnProfile;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -121,6 +128,18 @@ public class HomeFragment extends Fragment {
 
         // TEMUKAN btn_profile DAN TAMBAHKAN LISTENER-NYA DI SINI
         btnProfile = view.findViewById(R.id.btn_profile);
+        SharedPreferences prefs = requireActivity()
+                .getSharedPreferences("UserProfile", Context.MODE_PRIVATE);
+        String avatarPath = prefs.getString("avatarPath", null);
+
+        if (avatarPath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+            if (bitmap != null) {
+                btnProfile.setImageBitmap(bitmap);
+            }
+        } else {
+            btnProfile.setImageResource(R.drawable.ic_profile); // fallback icon
+        }
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

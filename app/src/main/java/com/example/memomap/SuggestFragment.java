@@ -1,5 +1,10 @@
 package com.example.memomap;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +64,28 @@ public class SuggestFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_suggest, container, false);
+        View view = inflater.inflate(R.layout.fragment_suggest, container, false);
+
+        ImageView profileIcon = view.findViewById(R.id.profileIcon);
+
+        SharedPreferences prefs = requireActivity()
+                .getSharedPreferences("UserProfile", Context.MODE_PRIVATE);
+        String avatarPath = prefs.getString("avatarPath", null);
+
+        if (avatarPath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+            if (bitmap != null) {
+                profileIcon.setImageBitmap(bitmap);
+            }
+        } else {
+            profileIcon.setImageResource(R.drawable.profile_icon); // default fallback
+        }
+
+        profileIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        return view;
     }
 }

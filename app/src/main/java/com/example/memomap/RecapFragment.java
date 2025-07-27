@@ -1,7 +1,11 @@
 package com.example.memomap;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.Calendar;
 
@@ -68,6 +74,7 @@ public class RecapFragment extends Fragment {
             R.drawable.recap7,
     };
 
+    private ShapeableImageView btnProfile;
     private final String[] recapTexts = {
             "You achieved your July goals!",
             "Your mood improved this week.",
@@ -320,6 +327,32 @@ public class RecapFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize and set image for btn_profile
+        ShapeableImageView btnProfile = view.findViewById(R.id.profileIcon);
+
+        SharedPreferences prefs = requireActivity()
+                .getSharedPreferences("UserProfile", Context.MODE_PRIVATE);
+        String avatarPath = prefs.getString("avatarPath", null);
+
+        if (avatarPath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+            if (bitmap != null) {
+                btnProfile.setImageBitmap(bitmap);
+            }
+        } else {
+            btnProfile.setImageResource(R.drawable.ic_profile); // fallback icon
+        }
+
+        btnProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfileActivity.class);
+            startActivity(intent);
+        });
     }
 
     // --- Method untuk menampilkan state tombol awal (Choose Date + Create!) ---

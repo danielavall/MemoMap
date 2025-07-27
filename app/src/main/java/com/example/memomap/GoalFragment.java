@@ -3,7 +3,11 @@ package com.example.memomap;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent; // Import Intent
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 // No need for androidx.navigation.Navigation; // Remove this import if you're not using Navigation Component at all
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -53,7 +58,8 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
     private ImageView iconPulauEnd;
 
     private String currentFilter = "All";
-    private ImageButton btnProfile;
+//    private ImageButton btnProfile;
+    private ShapeableImageView btnProfile;
 
     public GoalFragment() {
         // Required empty public constructor
@@ -180,6 +186,18 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 
         // Initialize and set OnClickListener for btn_profile
         btnProfile = view.findViewById(R.id.btn_profile);
+        SharedPreferences prefs = requireActivity()
+                .getSharedPreferences("UserProfile", Context.MODE_PRIVATE);
+        String avatarPath = prefs.getString("avatarPath", null);
+
+        if (avatarPath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+            if (bitmap != null) {
+                btnProfile.setImageBitmap(bitmap);
+            }
+        } else {
+            btnProfile.setImageResource(R.drawable.ic_profile); // fallback icon
+        }
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
