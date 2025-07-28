@@ -4,6 +4,7 @@ import static com.example.memomap.R.id.avatarImage;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -83,7 +84,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            String avatarPath = intent.getStringExtra("avatarPath");
+            SharedPreferences prefs = getSharedPreferences("UserProfile", MODE_PRIVATE);
+            String avatarPath = prefs.getString("avatarPath", null);
             selectedSkin = intent.getIntExtra("skin", -1);
             selectedHair = intent.getIntExtra("hair", -1);
             selectedFace = intent.getIntExtra("face", -1);
