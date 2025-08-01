@@ -8,30 +8,31 @@
 
     <ImageView
         android:id="@+id/ivSad"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_emote_happy_purple"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/emote_sad_green"
+        android:layout_marginStart="6dp"
         android:layout_marginEnd="8dp"/>
 
     <ImageView
         android:id="@+id/ivCry"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_emote_happy_purple"
+        android:src="@drawable/ic_emote_cry_blue"
         android:layout_marginEnd="8dp"/>
 
     <ImageView
         android:id="@+id/ivNeutral"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_emote_happy_purple"
+        android:src="@drawable/ic_emote_neutral_orange"
         android:layout_marginEnd="8dp"/>
 
     <ImageView
         android:id="@+id/ivHappy"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_emote_happy_purple"
+        android:src="@drawable/ic_emote_smile_pink"
         android:layout_marginEnd="8dp"/>
 
     <ImageView
