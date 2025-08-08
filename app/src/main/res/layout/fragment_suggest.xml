@@ -13,7 +13,25 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/arrowHint"
+            android:layout_width="100dp"
+            android:layout_height="175dp"
+            android:src="@drawable/ic_arrow_up_circle"
+            android:layout_marginBottom="25dp" />
+
+        <TextView
+            android:id="@+id/textHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose your memorable date!"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="12sp"
+            android:layout_marginBottom="100dp"
+            android:textColor="#b8b8b8" />
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/layout_main_content"
@@ -42,7 +60,7 @@
             android:fontFamily="@font/poppins_regular"
             android:paddingStart="30dp"
             android:paddingEnd="60dp"
-            android:text="Small steps every day lead to big changes."
+            android:text="Small steps ever day lead to big changes."
             android:textAlignment="viewStart"
             android:textSize="12sp" />
 
@@ -56,9 +74,9 @@
             android:layout_marginTop="0dp"
             android:scaleType="centerCrop"
             android:contentDescription="Profile Icon"
+            app:shapeAppearanceOverlay="@style/CircleImageView"
             android:background="@drawable/circle_white"
-            android:padding="2dp"
-            app:shapeAppearanceOverlay="@style/CircleImageView" />
+            android:padding="2dp"/>
 
         <LinearLayout
             android:id="@+id/dateButtons"
@@ -191,49 +209,12 @@
             android:src="@drawable/boat" />
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/layoutRecap"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:padding="0dp">
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPagerRecap"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:clipChildren="false"
-            android:paddingStart="0dp"
-            android:paddingEnd="0dp"
-            android:overScrollMode="never" />
-
-        <ImageButton
-            android:id="@+id/backButtonRecapCards"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/back_button"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_gravity="top|start"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/linearLayoutIndicator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="24dp"
-            android:gravity="center" />
-    </FrameLayout>
-
     <ScrollView
-        android:id="@+id/suggestionScroll"
+        android:id="@+id/suggestionScrollView"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="500dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="180dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="16dp"
@@ -502,6 +483,5 @@
 
         </LinearLayout>
     </ScrollView>
-
 
 </FrameLayout>
