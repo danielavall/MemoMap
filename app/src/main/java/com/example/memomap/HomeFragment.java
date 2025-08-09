@@ -55,6 +55,8 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,12 +79,7 @@ public class HomeFragment extends Fragment {
         todayCalendar.set(Calendar.MINUTE, 0);
         todayCalendar.set(Calendar.SECOND, 0);
         todayCalendar.set(Calendar.MILLISECOND, 0);
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override

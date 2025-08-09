@@ -50,6 +50,8 @@
             android:exported="false"/>
 
 
+
+
         <!--                <activity android:name=".CalendarRecap" android:exported="false" />-->
 
         <!--        <activity android:name=".LoadingRecap" android:exported="true">-->
