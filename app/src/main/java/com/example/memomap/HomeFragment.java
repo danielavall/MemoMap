@@ -83,6 +83,12 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -283,26 +289,26 @@ public class HomeFragment extends Fragment {
         // Example: Only showing January 2025 data for demonstration.
         // You MUST expand this to load data for all relevant months/years.
         if (month == Calendar.JANUARY && year == 2025) {
-            journalList.add(new JournalCardModel("WED", "01", "JAN", "Tahun Baru di rumah aja, bingung mau mulai dari mana", 0, 0, R.color.orange));
-            journalList.add(new JournalCardModel("THU", "02", "JAN", "Mulai ngerapihin to-do list dan niat tahun ini", 1, 2, R.color.pink));
-            journalList.add(new JournalCardModel("FRI", "03", "JAN", "Beresin file kuliah semester lalu sambil nostalgia", 2, 1, R.color.pink));
-            journalList.add(new JournalCardModel("SAT", "04", "JAN", "Quality time bareng keluarga seharian penuh", 5, 0, R.color.purple));
-            journalList.add(new JournalCardModel("SUN", "05", "JAN", "Overthinking soal kuliah yang bakal mulai lagi", 0, 3, R.color.blue));
-            journalList.add(new JournalCardModel("MON", "06", "JAN", "Hari pertama kuliah, belum siap mental", 2, 6, R.color.blue));
-            journalList.add(new JournalCardModel("TUE", "07", "JAN", "Ngoding sampai malam, stuck di layout XML", 2, 0, R.color.green));
-            journalList.add(new JournalCardModel("WED", "08", "JAN", "Ketemu teman baru, mulai merasa lebih nyaman", 3, 0, R.color.purple));
-            journalList.add(new JournalCardModel("THU", "09", "JAN", "Presentasi perdana semester ini, lumayan grogi", 1, 4, R.color.blue));
-            journalList.add(new JournalCardModel("FRI", "10", "JAN", "Ngopi sore sambil ngerjain tugas kecil-kecilan", 3, 1, R.color.pink));
-            journalList.add(new JournalCardModel("SAT", "11", "JAN", "Bantu mama belanja mingguan, lumayan capek", 4, 0, R.color.green));
-            journalList.add(new JournalCardModel("SUN", "12", "JAN", "Tidur seharian, badan dan otak butuh recharge", 0, 0, R.color.green));
-            journalList.add(new JournalCardModel("MON", "13", "JAN", "Mulai minggu dengan kelas pagi yang berat banget", 1, 3, R.color.blue));
-            journalList.add(new JournalCardModel("TUE", "14", "JAN", "Ngoding Android bareng temen, seru tapi pusing", 2, 2, R.color.orange));
-            journalList.add(new JournalCardModel("WED", "15", "JAN", "Kelas full dari pagi sampe sore, lumayan lelah", 1, 1, R.color.green));
-            journalList.add(new JournalCardModel("THU", "16", "JAN", "Dosen kasih motivasi soal masa depan, semangat naik!", 4, 0, R.color.purple));
-            journalList.add(new JournalCardModel("FRI", "17", "JAN", "Tugas mulai numpuk, tapi masih bisa santai dikit", 2, 2, R.color.orange));
-            journalList.add(new JournalCardModel("SAT", "18", "JAN", "Nugas di kafe sambil dengerin musik jazz", 3, 0, R.color.pink));
-            journalList.add(new JournalCardModel("SUN", "19", "JAN", "Kayaknya mulai butuh short escape deh", 1, 1, R.color.green));
-            journalList.add(new JournalCardModel("MON", "20", "JAN", "Mulai minggu dengan pikiran berat soal deadline", 0, 4, R.color.blue));
+            journalList.add(new JournalCardModel("WED", "01", "JAN", "Hari ini aku merasa sedikit lebih ringan… karena ditemani.", 0, 0, R.color.pink));   // Calm/Happy
+            journalList.add(new JournalCardModel("THU", "02", "JAN", "Bersihin balkon istana, nggak terlalu beku sekarang", 1, 2, R.color.pink));         // Calm/Happy
+            journalList.add(new JournalCardModel("FRI", "03", "JAN", "Nulis jurnal satu kalimat ternyata bikin hati nggak dingin lagi.", 2, 1, R.color.purple)); // Very Happy
+            journalList.add(new JournalCardModel("SAT", "04", "JAN", "Nulis memo pas badai salju, rasanya kayak ngobrol sama diri sendiri.", 5, 0, R.color.orange)); // Neutral/Meh
+            journalList.add(new JournalCardModel("SUN", "05", "JAN", "Hari ini aku centang semua to-do list. Produktif banget!", 0, 3, R.color.purple));  // Very Happy
+            journalList.add(new JournalCardModel("MON", "06", "JAN", "Setiap hari cuma satu kalimat, tapi rasanya hidupku makin jelas.", 2, 6, R.color.pink)); // Calm/Happy
+            journalList.add(new JournalCardModel("TUE", "07", "JAN", "Anna bawain teh hangat", 2, 0, R.color.pink));                                         // Calm/Happy
+            journalList.add(new JournalCardModel("WED", "08", "JAN", "Udara segar bikin mood oke", 3, 0, R.color.pink));                                     // Calm/Happy
+            journalList.add(new JournalCardModel("THU", "09", "JAN", "Bersihkan balkon istana, saljunya berkurang", 1, 4, R.color.pink));                    // Calm/Happy
+            journalList.add(new JournalCardModel("FRI", "10", "JAN", "Ngopi sore sambil ngerjain tugas kecil-kecilan", 3, 1, R.color.pink));                 // Calm/Happy
+            journalList.add(new JournalCardModel("SAT", "11", "JAN", "Hari ini aku centang semua to-do list… rasanya hebat!", 4, 0, R.color.purple));        // Very Happy
+            journalList.add(new JournalCardModel("SUN", "12", "JAN", "Tidur seharian, badan dan otak butuh recharge", 0, 0, R.color.green));                 // Tired/Sad
+            journalList.add(new JournalCardModel("MON", "13", "JAN", "Anna bilang aku lebih sering senyum sekarang.", 1, 3, R.color.purple));                // Very Happy
+            journalList.add(new JournalCardModel("TUE", "14", "JAN", "Anna bawa teh coklat panas, suasana jadi lebih cair.", 2, 2, R.color.pink));           // Calm/Happy
+            journalList.add(new JournalCardModel("WED", "15", "JAN", "Hari ini aku nyanyi sebentar. Rasanya seperti ada kehangatan kembali.", 1, 1, R.color.purple)); // Very Happy
+            journalList.add(new JournalCardModel("THU", "16", "JAN", "Aku coba menulis memo, rasanya aneh tapi sedikit lega", 4, 0, R.color.orange));        // Neutral/Meh
+            journalList.add(new JournalCardModel("FRI", "17", "JAN", "Tugas mulai numpuk, tapi masih bisa santai dikit", 2, 2, R.color.blue));                // Worried/Low
+            journalList.add(new JournalCardModel("SAT", "18", "JAN", "Aku butuh support hari ini.", 3, 0, R.color.blue));                                     // Worried/Low
+            journalList.add(new JournalCardModel("SUN", "19", "JAN", "Kayaknya mulai butuh refreshing", 1, 1, R.color.green));                                // Tired/Sad
+            journalList.add(new JournalCardModel("MON", "20", "JAN", "Mulai minggu dengan pikiran berat soal kerajaan", 0, 4, R.color.blue));                 // Worried/Low
         }
         // Add more 'else if' blocks for other months/years if you have specific dummy data for them
         else if (month == Calendar.JULY && year == 2025) {
