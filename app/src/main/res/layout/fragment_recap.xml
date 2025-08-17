@@ -95,7 +95,7 @@
                 android:background="@drawable/spinner_background"
                 android:backgroundTint="@color/green"
                 android:drawableEnd="@drawable/next_button_small"
-                android:paddingStart="32dp"
+                android:paddingStart="55dp"
                 android:paddingEnd="70dp"
                 android:drawablePadding="-5dp"
                 android:visibility="gone" />
