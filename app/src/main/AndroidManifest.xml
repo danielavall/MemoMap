@@ -41,6 +41,16 @@
             android:name=".OneLineActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AvatarActivity"
+            android:exported="false"/>
+
+
+
 
         <!--                <activity android:name=".CalendarRecap" android:exported="false" />-->
 

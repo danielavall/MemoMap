@@ -1,13 +1,23 @@
-// app/src/main/java/com/example/memomap/GoalFragment.java
 package com.example.memomap;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent; // Import Intent
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,8 +25,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+// No need for androidx.navigation.NavController;
+// No need for androidx.navigation.Navigation; // Remove this import if you're not using Navigation Component at all
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -30,7 +43,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
 
     private RecyclerView goalRecyclerView;
     private GoalAdapter goalAdapter;
-    private List<Goal> allGoals; // Ini adalah sumber data utama kita
+    private List<Goal> allGoals;
     private FloatingActionButton addGoalsButton;
     private TabLayout tabLayout;
 
@@ -39,7 +52,14 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
     private TextView emptyGoalsText;
     private TextView emptyDoneText;
 
+    private TextView progressPercentageText;
+    private ProgressBar goalsProgressBar;
+    private ImageView iconKapalStart;
+    private ImageView iconPulauEnd;
+
     private String currentFilter = "All";
+//    private ImageButton btnProfile;
+    private ShapeableImageView btnProfile;
 
     public GoalFragment() {
         // Required empty public constructor
@@ -67,11 +87,11 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         allGoals = new ArrayList<>();
-        allGoals.add(new Goal("Belajar Android Jetpack Compose", "Task", false));
-        allGoals.add(new Goal("Lari Pagi 30 Menit", "Task", true));
-        allGoals.add(new Goal("Baca Buku 'Atomic Habits'", "Goal", false));
-        allGoals.add(new Goal("Selesaikan Laporan Bulanan", "Goal", false));
-        allGoals.add(new Goal("Telepon Orang Tua", "Task", false));
+//        allGoals.add(new Goal("Belajar Android Jetpack Compose", "Task", false));
+//        allGoals.add(new Goal("Lari Pagi 30 Menit", "Task", true));
+//        allGoals.add(new Goal("Baca Buku 'Atomic Habits'", "Goal", false));
+//        allGoals.add(new Goal("Selesaikan Laporan Bulanan", "Goal", false));
+//        allGoals.add(new Goal("Telepon Orang Tua", "Task", false));
         allGoals.add(new Goal("Menyiram Tanaman", "Goal", true));
     }
 
@@ -83,23 +103,24 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
         goalRecyclerView = view.findViewById(R.id.goal_recycler_view);
         goalRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Inisialisasi GoalAdapter dengan Context dari Fragment
+        progressPercentageText = view.findViewById(R.id.progress_percentage_text);
+        goalsProgressBar = view.findViewById(R.id.goals_progress_bar);
+        iconKapalStart = view.findViewById(R.id.icon_kapal_start);
+        iconPulauEnd = view.findViewById(R.id.icon_pulau_end);
+
         goalAdapter = new GoalAdapter(new ArrayList<>(), getContext());
         goalRecyclerView.setAdapter(goalAdapter);
         goalAdapter.setOnGoalStatusChangeListener(this);
-        goalAdapter.setOnGoalDeleteListener(this); // Set delete listener ke fragment ini
+        goalAdapter.setOnGoalDeleteListener(this);
 
-        // Inisialisasi SwipeToDeleteCallback dan attach ke RecyclerView
-        // Pastikan R.drawable.ic_delete_white ada di folder drawable Anda
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(goalAdapter, R.drawable.icon_trash));
         itemTouchHelper.attachToRecyclerView(goalRecyclerView);
 
         addGoalsButton = view.findViewById(R.id.addGoalsButton);
         addGoalsButton.setOnClickListener(v -> {
-            Log.d("DEBUG_APP", "GoalFragment: currentFilter saat klik tombol tambah: " + currentFilter); // Tambahkan ini
             AddGoalDialogFragment addGoalDialog = new AddGoalDialogFragment();
             Bundle args = new Bundle();
-            String preSelectLabel = "Task"; // Default
+            String preSelectLabel = "Task";
 
             if ("Goals".equals(currentFilter)) {
                 preSelectLabel = "Goal";
@@ -131,6 +152,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
                     goalRecyclerView.post(() -> {
                         filterGoals(currentFilter);
                         showEmptyMessage();
+                        updateProgressUI();
                     });
                 }
             }
@@ -156,21 +178,114 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
                     goalRecyclerView.post(() -> {
                         filterGoals(currentFilter);
                         showEmptyMessage();
+                        updateProgressUI();
                     });
                 }
+            }
+        });
+
+        // Initialize and set OnClickListener for btn_profile
+        btnProfile = view.findViewById(R.id.btn_profile);
+        SharedPreferences prefs = requireActivity()
+                .getSharedPreferences("UserProfile", Context.MODE_PRIVATE);
+        String avatarPath = prefs.getString("avatarPath", null);
+
+        if (avatarPath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+            if (bitmap != null) {
+                btnProfile.setImageBitmap(bitmap);
+            }
+        } else {
+            btnProfile.setImageResource(R.drawable.ic_profile); // fallback icon
+        }
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to start ProfileActivity
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent); // Start the ProfileActivity
+                Toast.makeText(getContext(), "Profile button clicked!", Toast.LENGTH_SHORT).show(); // For testing
             }
         });
 
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
+    private void updateProgressUI() {
+        int totalGoals = 0;
+        int completedGoals = 0;
+
+        for (Goal goal : allGoals) {
+            totalGoals++;
+            if (goal.isCompleted()) {
+                completedGoals++;
+            }
+        }
+
+        final int progressPercentage;
+        if (totalGoals > 0) {
+            progressPercentage = (completedGoals * 100) / totalGoals;
+        } else {
+            progressPercentage = 0;
+        }
+
+        // --- PERBAIKAN: Animasi Progress Bar ---
+        ObjectAnimator animator = ObjectAnimator.ofInt(goalsProgressBar, "progress", goalsProgressBar.getProgress(), progressPercentage);
+        animator.setDuration(750); // Durasi animasi (milidetik)
+        animator.start();
+        // --- AKHIR PERBAIKAN ANIMASI PROGRESS BAR ---
+
+        // --- PERBAIKAN BARU: Animasi Teks Persentase ---
+        // Dapatkan nilai persentase yang saat ini ditampilkan di TextView
+        int currentDisplayedPercentage = 0;
+        String currentText = progressPercentageText.getText().toString();
+        if (currentText.endsWith("%") && currentText.length() > 1) {
+            try {
+                currentDisplayedPercentage = Integer.parseInt(currentText.substring(0, currentText.length() - 1));
+            } catch (NumberFormatException e) {
+                // If parsing fails (e.g., default text "0%", or error), set to 0
+                currentDisplayedPercentage = 0;
+            }
+        }
+
+        ValueAnimator textAnimator = ValueAnimator.ofInt(currentDisplayedPercentage, progressPercentage);
+        textAnimator.setDuration(750); // Match duration with progress bar and ship
+        textAnimator.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            progressPercentageText.setText(animatedValue + "%");
+        });
+        textAnimator.start();
+        // --- AKHIR PERBAIKAN ANIMASI TEKS PERSENTASE ---
+
+
+        goalsProgressBar.post(() -> {
+            int progressBarWidth = goalsProgressBar.getWidth();
+            int shipIconWidth = iconKapalStart.getWidth();
+
+            if (progressBarWidth > 0 && shipIconWidth > 0) {
+                float translationRange = progressBarWidth - shipIconWidth;
+                float targetTranslationX = (progressPercentage / 100f) * translationRange;
+
+                final float translationXForShip = Math.max(0f, Math.min(targetTranslationX, translationRange));
+
+                // --- PERBAIKAN: Animasi Pergerakan Kapal ---
+                iconKapalStart.animate()
+                        .translationX(translationXForShip)
+                        .setDuration(750) // Durasi animasi (milidetik)
+                        .start();
+                // --- AKHIR PERBAIKAN ANIMASI PERGERAKAN KAPAL ---
+            }
+        });
+    }
+
     private void updateTabAppearance(TabLayout.Tab tab, boolean isSelected) {
         View tabView = tab.view;
         if (tabView != null) {
             if (isSelected) {
-                tabView.setBackgroundResource(R.drawable.rounded_active_blue); // Pastikan drawable ini ada
+                tabView.setBackgroundResource(R.drawable.rounded_active_blue);
             } else {
-                tabView.setBackgroundResource(R.drawable.rounded_transparent_background); // Pastikan drawable ini ada
+                tabView.setBackgroundResource(R.drawable.rounded_transparent_background);
             }
         }
     }
@@ -279,7 +394,6 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             if (match) filteredList.add(goal);
         }
 
-        // Sorting sesuai filter
         if ("Done".equals(filter)) {
             filteredList.sort((g1, g2) -> Long.compare(g2.getLastCompletionTimestamp(), g1.getLastCompletionTimestamp()));
         } else {
@@ -300,7 +414,6 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
         Goal newGoal = new Goal(goalText, type, false);
         allGoals.add(0, newGoal);
 
-        // Cek apakah goal ini cocok dengan filter sekarang
         boolean isMatch = false;
         switch (currentFilter) {
             case "All":
@@ -322,6 +435,7 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
         }
 
         showEmptyMessage();
+        updateProgressUI();
     }
 
 
@@ -331,33 +445,28 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             goalRecyclerView.post(() -> {
                 filterGoals(currentFilter);
                 showEmptyMessage();
+                updateProgressUI();
             });
         }
     }
 
     @Override
     public void onGoalDeleted(Goal deletedGoal) {
-        // Hapus goal yang sesuai dari sumber data utama (allGoals)
         Iterator<Goal> iterator = allGoals.iterator();
         while (iterator.hasNext()) {
             Goal goal = iterator.next();
-            // Penting: Pastikan objek Goal memiliki metode equals() dan hashCode() yang di-override
-            // dengan benar, atau bandingkan berdasarkan properti unik seperti judul.
             if (goal.equals(deletedGoal)) {
                 iterator.remove();
                 break;
             }
         }
 
-        // Setelah goal dihapus dari allGoals, filter ulang untuk memperbarui tampilan
         if (goalRecyclerView != null) {
             goalRecyclerView.post(() -> {
                 filterGoals(currentFilter);
                 showEmptyMessage();
+                updateProgressUI();
             });
         }
     }
 }
-
-
-

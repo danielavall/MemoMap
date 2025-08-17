@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+
         boolean goHome = getIntent().getBooleanExtra("go_home", false);
         if (goHome) {
             replaceFragment(new HomeFragment());

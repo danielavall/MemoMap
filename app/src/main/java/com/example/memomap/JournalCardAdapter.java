@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.ViewHolder> {
-
     private final List<JournalCardModel> journalList;
+    private OnItemClickListener listener;
 
     public JournalCardAdapter(List<JournalCardModel> journalList) {
         this.journalList = journalList;
     }
+
 
     @NonNull
     @Override
@@ -33,6 +34,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
     public void onBindViewHolder(@NonNull JournalCardAdapter.ViewHolder holder, int position) {
         JournalCardModel item = journalList.get(position);
 
+        // Set data seperti sebelumnya
         holder.day.setText(item.getDay());
         holder.date.setText(item.getDate());
         holder.month.setText(item.getMonth());
@@ -55,9 +57,16 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         holder.photoCount.setText(photoText);
         holder.videoCount.setText(videoText);
 
+        holder.cardViewContainer.setCardBackgroundColor(context.getColor(item.getBackgroundColor()));
 
-        holder.cardViewContainer.setCardBackgroundColor(holder.itemView.getContext().getColor(item.getBackgroundColor()));
+        // ✅ Tambahkan listener klik
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(item);
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
@@ -79,4 +88,14 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             cardViewContainer = (CardView) itemView;
         }
     }
+
+    public interface OnItemClickListener {
+        void onItemClick(JournalCardModel item);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+
 }

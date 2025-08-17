@@ -29,7 +29,7 @@ public class BottomSheetEmojiFragment extends BottomSheetDialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_bottom_sheet_emoji, container, false);
 
-        view.findViewById(R.id.ivSad).setOnClickListener(v -> sendEmoji(R.drawable.ic_emote_sad_green));
+        view.findViewById(R.id.ivSad).setOnClickListener(v -> sendEmoji(R.drawable.emote_sad_green));
         view.findViewById(R.id.ivCry).setOnClickListener(v -> sendEmoji(R.drawable.ic_emote_cry_blue));
         view.findViewById(R.id.ivNeutral).setOnClickListener(v -> sendEmoji(R.drawable.ic_emote_neutral_orange));
         view.findViewById(R.id.ivHappy).setOnClickListener(v -> sendEmoji(R.drawable.ic_emote_happy_purple));

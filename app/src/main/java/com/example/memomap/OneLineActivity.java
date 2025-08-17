@@ -56,6 +56,9 @@ public class OneLineActivity extends AppCompatActivity {
             // Inflate layout pop-up emoji
             View popupView = getLayoutInflater().inflate(R.layout.fragment_bottom_sheet_emoji, null);
 
+            // Ukur tinggi popupView
+            popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+
             // Buat PopupWindow
             final PopupWindow popupWindow = new PopupWindow(popupView,
                     LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -63,15 +66,23 @@ public class OneLineActivity extends AppCompatActivity {
                     true); // true: bisa ditutup otomatis saat klik di luar
 
             // Handle klik pada masing-masing emoji
-            setEmojiClick(popupView, R.id.ivSad, R.drawable.ic_emote_sad_green, popupWindow, ivEmoji);
+            setEmojiClick(popupView, R.id.ivSad, R.drawable.emote_sad_green, popupWindow, ivEmoji);
             setEmojiClick(popupView, R.id.ivCry, R.drawable.ic_emote_cry_blue, popupWindow, ivEmoji);
             setEmojiClick(popupView, R.id.ivNeutral, R.drawable.ic_emote_neutral_orange, popupWindow, ivEmoji);
             setEmojiClick(popupView, R.id.ivHappy, R.drawable.ic_emote_happy_purple, popupWindow, ivEmoji);
             setEmojiClick(popupView, R.id.ivSmile, R.drawable.ic_emote_smile_pink, popupWindow, ivEmoji);
 
-            // Tampilkan pop-up di atas tombol
-            popupWindow.showAsDropDown(ivEmoji, 0, -ivEmoji.getHeight() * 3); // Y offset agar naik ke atas
+            // Hitung posisi ivEmoji di layar
+            int[] location = new int[2];
+            ivEmoji.getLocationOnScreen(location);
+            int x = location[0];
+            int y = location[1];
+
+            // Tampilkan pop-up di atas tombol emoji
+            popupWindow.showAtLocation(ivEmoji, android.view.Gravity.NO_GRAVITY,
+                    x, y - popupView.getMeasuredHeight() - 20);
         });
+
 
 
         //Inisialisasi semua view yang digunakan

@@ -283,7 +283,8 @@
                         android:layout_height="wrap_content"
                         android:text="Male"
                         android:textSize="12sp"
-                        android:paddingEnd="8dp" />
+                        android:paddingEnd="8dp"
+                        android:checked="true" />
 
                     <RadioButton
                         android:id="@+id/rbFemale"
@@ -313,7 +314,8 @@
                             android:textSize="14sp"
                             android:layout_marginBottom="4dp"
                             android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"/>
+                            android:layout_width="wrap_content"
+                            />
 
                         <EditText
                             android:id="@+id/etFirstName"
@@ -323,7 +325,8 @@
                             android:paddingHorizontal="16dp"
                             android:textColor="#000000"
                             android:textSize="14sp"
-                            android:hint="Enter First Name"/>
+                            android:hint="Enter First Name"
+                            android:text="Dontol"/>
                     </LinearLayout>
 
                     <!-- Last Name -->
@@ -350,7 +353,8 @@
                             android:paddingHorizontal="16dp"
                             android:textColor="#000000"
                             android:textSize="14sp"
-                            android:hint="Enter Last Name"/>
+                            android:hint="Enter Last Name"
+                            android:text="Adit"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -379,7 +383,8 @@
                         android:textColor="#000000"
                         android:textSize="14sp"
                         android:hint="Enter Email"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:text="DontolAdit@gmail.com"/>
                 </LinearLayout>
 
 
@@ -415,7 +420,8 @@
                             android:textColor="#000000"
                             android:textSize="14sp"
                             android:hint="Enter Phone Number"
-                            android:inputType="phone" />
+                            android:inputType="phone"
+                            android:text="08234718322"/>
                     </LinearLayout>
 
                     <!-- Date of Birth -->
@@ -444,7 +450,8 @@
                             android:textSize="14sp"
                             android:hint="Select Date of Birth"
                             android:focusable="false"
-                            android:clickable="true" />
+                            android:clickable="true"
+                            android:text="30/07/1992"/>
                     </LinearLayout>
                 </LinearLayout>
 

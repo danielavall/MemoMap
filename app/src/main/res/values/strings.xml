@@ -109,6 +109,9 @@
     <string name="empty_goals_message">You haven\'t created a Goals</string>
     <string name="empty_done_message">No Goals or Tasks Completed</string>
     <string name="delete_button">Delete Button</string>
+    <string name="icon_kapal">icon_kapal</string>
+    <string name="icon_pulau">icon_pulau</string>
+    <string name="percentage">0%</string>
 
     <!-- Strings used for activity_one_line -->
     <string name="desc_close_button">Closed</string>
@@ -126,7 +129,7 @@
     <string name="foto_dan_video">Foto dan Video</string>
     <string name="tv_question_text">What happened today?</string>
     <string name="save_button_text">Save</string>
-
+    <string name="judul">Nonton Film Longlegs</string>
 
 
 
