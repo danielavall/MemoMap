@@ -87,11 +87,11 @@ public class GoalFragment extends Fragment implements AddGoalDialogFragment.AddG
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         allGoals = new ArrayList<>();
-        allGoals.add(new Goal("Belajar Android Jetpack Compose", "Task", false));
-        allGoals.add(new Goal("Lari Pagi 30 Menit", "Task", true));
-        allGoals.add(new Goal("Baca Buku 'Atomic Habits'", "Goal", false));
-        allGoals.add(new Goal("Selesaikan Laporan Bulanan", "Goal", false));
-        allGoals.add(new Goal("Telepon Orang Tua", "Task", false));
+//        allGoals.add(new Goal("Belajar Android Jetpack Compose", "Task", false));
+//        allGoals.add(new Goal("Lari Pagi 30 Menit", "Task", true));
+//        allGoals.add(new Goal("Baca Buku 'Atomic Habits'", "Goal", false));
+//        allGoals.add(new Goal("Selesaikan Laporan Bulanan", "Goal", false));
+//        allGoals.add(new Goal("Telepon Orang Tua", "Task", false));
         allGoals.add(new Goal("Menyiram Tanaman", "Goal", true));
     }
 
