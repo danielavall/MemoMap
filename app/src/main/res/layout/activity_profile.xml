@@ -55,7 +55,7 @@
 
             <!-- Name -->
             <TextView
-                android:text="Dontol Adit"
+                android:text="Elsa Binti Tan"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -326,7 +326,7 @@
                             android:textColor="#000000"
                             android:textSize="14sp"
                             android:hint="Enter First Name"
-                            android:text="Dontol"/>
+                            android:text="Elsa"/>
                     </LinearLayout>
 
                     <!-- Last Name -->
@@ -354,7 +354,7 @@
                             android:textColor="#000000"
                             android:textSize="14sp"
                             android:hint="Enter Last Name"
-                            android:text="Adit"/>
+                            android:text="Binti Tan"/>
                     </LinearLayout>
                 </LinearLayout>
 
