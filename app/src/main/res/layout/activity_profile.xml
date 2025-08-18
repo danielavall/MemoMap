@@ -55,7 +55,7 @@
 
             <!-- Name -->
             <TextView
-                android:text="Dontol Adit"
+                android:text="Elsa Binti Tan"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
