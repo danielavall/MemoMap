@@ -280,7 +280,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “You should be more consistent with your workouts”"
+                        android:text="1. “Kamu harus sering sering foto bareng.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -288,7 +288,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Because you often wrote about enjoying exercise but skipped it recently."
+                        android:text="Karena kamu banyak menulis memo positif dan banyak menangkap foto moment kegiatan kamu saat menulis memo bahagia."
                         android:textColor="@color/grey"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -311,7 +311,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “You should be more consistent with your workouts”"
+                        android:text="1. “Kamu harus sering-sering mendengarkan musik.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -319,7 +319,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Because you often wrote about enjoying exercise but skipped it recently."
+                        android:text="Karena kamu bilang musik bisa menenangkan pikiranmu saat sedang stres."
                         android:textColor="@color/grey"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -342,7 +342,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “You should be more consistent with your workouts”"
+                        android:text="1. “Kamu harus sering-sering menulis jurnal.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -350,7 +350,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Because you often wrote about enjoying exercise but skipped it recently."
+                        android:text="Karena kamu banyak menulis tentang pentingnya menulis jurnal untuk memproses emosi."
                         android:textColor="@color/grey"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -373,7 +373,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “You should be more consistent with your workouts”"
+                        android:text="1. “Kamu harus sering-sering mencoba resep baru.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -381,7 +381,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Because you often wrote about enjoying exercise but skipped it recently."
+                        android:text="Karena kamu banyak membaca buku resep dan bilang ingin jadi koki yang handal."
                         android:textColor="@color/grey"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -404,7 +404,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “You should be more consistent with your workouts”"
+                        android:text="1. “Kamu harus sering-sering menghubungi teman lama.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -412,7 +412,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Because you often wrote about enjoying exercise but skipped it recently."
+                        android:text="Karena kamu banyak menceritakan kenangan indah saat masih sering bermain dengan mereka."
                         android:textColor="@color/grey"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -435,7 +435,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “You should be more consistent with your workouts”"
+                        android:text="1. “Kamu harus sering-sering membuat daftar tugas harian.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -443,7 +443,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Because you often wrote about enjoying exercise but skipped it recently."
+                        android:text="Karena kamu sering bilang kesulitan mengatur jadwal dan menyelesaikan pekerjaan tepat waktu."
                         android:textColor="@color/grey"
                         android:textSize="12sp" />
                 </LinearLayout>
