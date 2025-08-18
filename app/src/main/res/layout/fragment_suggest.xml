@@ -280,7 +280,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “Kamu harus sering sering foto bareng.”"
+                        android:text="2. “Kamu harus sering sering foto bareng.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -311,7 +311,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “Kamu harus sering-sering mendengarkan musik.”"
+                        android:text="3. “Kamu harus sering-sering mendengarkan musik.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -342,7 +342,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “Kamu harus sering-sering menulis jurnal.”"
+                        android:text="4. “Kamu harus sering-sering menulis jurnal.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -373,7 +373,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “Kamu harus sering-sering mencoba resep baru.”"
+                        android:text="5. “Kamu harus sering-sering mencoba resep baru.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -404,7 +404,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “Kamu harus sering-sering menghubungi teman lama.”"
+                        android:text="6. “Kamu harus sering-sering menghubungi teman lama.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -435,7 +435,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “Kamu harus sering-sering membuat daftar tugas harian.”"
+                        android:text="7. “Kamu harus sering-sering membuat daftar tugas harian.”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -466,7 +466,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. “You should be more consistent with your workouts”"
+                        android:text="8. “You should be more consistent with your workouts”"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
